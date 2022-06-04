@@ -56,6 +56,7 @@ class Agenda_Admin {
 		add_action( 'admin_menu', array( $this, 'add_plugin_to_admin_menu' ), 9 );
 		add_action( 'add_meta_boxes_agenda_events', array( $this, 'setup_agenda_metaboxes' ));
 		add_action( 'save_post_agenda_events', array( $this, 'save_agenda_metabox_data') );
+		add_action( 'rest_api_init', array( $this, 'register_rest_api_metaboxes' ) );
 
 	}
 
@@ -169,7 +170,7 @@ class Agenda_Admin {
 		add_meta_box(
 			'agenda_event_metaboxes', 
 			__( 'Camps personalitzats pels anuncis', 'agenda' ), 
-			array($this,'agenda_event_metaboxes'), 
+			array($this, 'agenda_event_metaboxes'), 
 			'agenda_events',
 			'normal',
 			'high' 
@@ -307,6 +308,105 @@ class Agenda_Admin {
 		update_post_meta( $post_id, 'event_duration', $duration );
 		update_post_meta( $post_id, 'event_location', $location );
 		update_post_meta( $post_id, 'event_link', $link );
+	}
+
+	/**
+	 * Register agenda metaboxes in REST API
+	 * 
+	 * @since 1.0.0
+	 */
+	public function register_rest_api_metaboxes() {
+		register_rest_field( 'agenda_events', 'event_summary', array(
+			'get_callback' => array( $this, 'get_event_field' ),
+			'update_callback' => array( $this, 'update_event_field' ),
+			'schema' => array( 
+				'type' => 'string',
+				'arg_options' => array(
+					'sanitize_callback' => 'sanitize_text_field',
+				),
+			)
+		) );
+
+		register_rest_field( 'agenda_events', 'event_date', array(
+			'get_callback' => array( $this, 'get_event_field' ),
+			'update_callback' => array( $this, 'update_event_field' ),
+			'schema' => array( 
+				'type' => 'string',
+				'arg_options' => array(
+					'sanitize_callback' => 'sanitize_text_field',
+				),
+			)
+		) );
+
+		register_rest_field( 'agenda_events', 'event_time', array(
+			'get_callback' => array( $this, 'get_event_field' ),
+			'update_callback' => array( $this, 'update_event_field' ),
+			'schema' => array( 
+				'type' => 'string',
+				'arg_options' => array(
+					'sanitize_callback' => 'sanitize_text_field',
+				),				
+			)
+		) );
+
+		register_rest_field( 'agenda_events', 'event_duration', array(
+			'get_callback' => array( $this, 'get_event_field' ),
+			'update_callback' => array( $this, 'update_event_field' ),
+			'schema' => array( 
+				'type' => 'string',
+				'arg_options' => array(
+					'sanitize_callback' => 'sanitize_text_field',
+				),				
+			)
+		) );
+
+		register_rest_field( 'agenda_events', 'event_location', array(
+			'get_callback' => array( $this, 'get_event_field' ),
+			'update_callback' => array( $this, 'update_event_field' ),
+			'schema' => array( 
+				'type' => 'string',
+				'arg_options' => array(
+					'sanitize_callback' => 'sanitize_text_field',
+				),				
+			)
+		) );
+
+		register_rest_field( 'agenda_events', 'event_link', array(
+			'get_callback' => array( $this, 'get_event_field' ),
+			'update_callback' => array( $this, 'update_event_field' ),
+			'schema' => array( 
+				'type' => 'string',
+				'arg_options' => array(
+					'sanitize_callback' => 'sanitize_text_field',
+				),				
+			)
+		) );
+	}
+
+	/**
+	 * Get event field from REST API
+	 */
+	public function get_event_field( $object, $field_name, $request ) {
+		return get_post_meta( $object['id'], $field_name, true );
+	}
+
+	/**
+	 * Update event field from REST API
+	 * 
+	 * @since 1.0.0
+	 */
+	public function update_event_field( $value, $object, $field_name, $request ) {
+		if ( ! current_user_can( 'edit_post', $object['id'] ) ) {
+			return new WP_Error( 
+				'rest_cannot_update', 
+				__( 'Sorry, you are not allowed to update this post.' ), 
+				array( 'status' => rest_authorization_required_code() ) 
+			);
+		}
+
+		$value = sanitize_text_field( $value );
+
+		return update_post_meta( $object['id'], $field_name, $value );
 	}
 
 }
