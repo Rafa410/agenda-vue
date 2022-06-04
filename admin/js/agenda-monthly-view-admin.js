@@ -2,6 +2,7 @@ const { __, _x, _n, _nx } = wp.i18n;
 
 Vue.component('month-indicator', {
     props: ['month', 'year'],
+    emits: ['change-month'],
     methods: {
         getMonthName(month) {
             return [
@@ -22,11 +23,11 @@ Vue.component('month-indicator', {
     },
     template: `
         <div class="month-indicator d-flex align-items-center justify-content-evenly">
-            <button class="btn"><b-icon icon="chevron-left" /></button>
+            <button @click="$emit('change-month', -1)" class="btn"><b-icon icon="chevron-left" /></button>
                 <h2 class="fs-4 mb-0">
                     <span>{{ getMonthName(month) }} {{ year }}</span>
                 </h2>
-            <button class="btn"><b-icon icon="chevron-right" /></button>
+            <button @click="$emit('change-month', 1)" class="btn"><b-icon icon="chevron-right" /></button>
         </div>
     `,
 });
@@ -83,13 +84,22 @@ Vue.component('date-grid', {
 const app = new Vue({
     el: '#calendar-monthly-view-admin',
     data: {
-        message: 'Agenda monthly view admin',
         currentMonth: new Date().getMonth(),
         currentYear: new Date().getFullYear(),
     },
     methods: {
         getEvents() {
             return fetch('/wp-json/wp/v2/agenda_events').then((response) => response.json());
+        },
+        updateDate(n) {
+            this.currentMonth += n;
+            if (this.currentMonth < 0) {
+                this.currentMonth = 11;
+                this.currentYear--;
+            } else if (this.currentMonth > 11) {
+                this.currentMonth = 0;
+                this.currentYear++;
+            }
         },
     },
     mounted() {
@@ -101,7 +111,7 @@ const app = new Vue({
         <div class="wrap">
             <h1>Agenda</h1>
             <div class="calendar text-center p-3 my-4 mx-auto">
-                <month-indicator :month="currentMonth" :year="currentYear" />
+                <month-indicator @change-month="updateDate" :month="currentMonth" :year="currentYear" />
                 <days-of-week />
                 <date-grid :month="currentMonth" :year="currentYear" />
             </div>
