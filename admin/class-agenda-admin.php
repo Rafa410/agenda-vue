@@ -57,6 +57,7 @@ class Agenda_Admin {
 		add_action( 'add_meta_boxes_agenda_events', array( $this, 'setup_agenda_metaboxes' ));
 		add_action( 'save_post_agenda_events', array( $this, 'save_agenda_metabox_data') );
 		add_action( 'rest_api_init', array( $this, 'register_rest_api_metaboxes' ) );
+		add_action( 'rest_api_init', array( $this, 'register_rest_api_routes' ) );
 
 	}
 
@@ -420,6 +421,88 @@ class Agenda_Admin {
 		$value = sanitize_text_field( $value );
 
 		return update_post_meta( $object['id'], $field_name, $value );
+	}
+
+	/**
+	 * Register custom API endpoints
+	 * 
+	 * @since 1.0.0
+	 */
+	function register_rest_api_routes() {
+		register_rest_route( 'agenda/v1', '/events', array(
+			'methods' => 'GET',
+			'callback' => array( $this, 'agenta_events_rest_api_query' ),
+		) );
+	}
+
+	/**
+	 * Query agenda events
+	 * 
+	 * @since 1.0.0
+	 */
+	function agenta_events_rest_api_query() {
+		$args = array(
+			'post_type' => 'agenda_events',
+			'posts_per_page' => -1,
+			'orderby' => 'meta_value',
+			'order' => 'ASC',
+			'meta_key' => 'event_date',
+		);
+
+		if ( isset( $_GET['month'] ) ) {
+			$month = sanitize_text_field( $_GET['month'] );
+			$year = isset( $_GET['year'] ) ? sanitize_text_field( $_GET['year'] ) : date( 'Y' ); // Year is optional, defaults to current year
+			$start_date = $year . '-' . $month . '-01';
+
+			// Filter events by month
+			$args['meta_query'] = array(
+				'relation' => 'AND',
+				array(
+					'key' => 'event_date',
+					'value' => $start_date, // First day of the month
+					'compare' => '>=',
+					'type' => 'DATE',
+				),
+				array(
+					'key' => 'event_date',
+					'value' => $year . '-' . $month . '-' . date( 't', strtotime( $start_date ) ), // Last day of the month
+					'compare' => '<=',
+					'type' => 'DATE',
+				),
+			);
+		}
+
+		$query = new WP_Query( $args );
+
+		$events = array();
+
+		if ( $query->have_posts() ) {
+			while ( $query->have_posts() ) {
+				$query->the_post();
+
+				$event = array(
+					'id' => get_the_ID(),
+					'title' => get_the_title(),
+					'event_summary' => get_post_meta( get_the_ID(), 'event_summary', true ),
+					'event_date' => get_post_meta( get_the_ID(), 'event_date', true ),
+					'event_time' => get_post_meta( get_the_ID(), 'event_time', true ),
+					'event_duration' => get_post_meta( get_the_ID(), 'event_duration', true ),
+					'event_location' => get_post_meta( get_the_ID(), 'event_location', true ),
+					'event_link' => get_post_meta( get_the_ID(), 'event_link', true ),
+					'link' => get_permalink(),
+					'status' => get_post_status(),
+					'content' => array(
+						'rendered' => get_the_content(),
+					),
+				);
+
+				$events[] = $event;
+			}
+		}
+
+		wp_reset_postdata();
+
+		return $events;
 	}
 
 }
