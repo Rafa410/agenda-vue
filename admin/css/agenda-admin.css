@@ -1,0 +1,22 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.event_data_metaboxes input,
+.event_data_metaboxes textarea {
+    width: 100%;
+}
+
+.event_data_metaboxes li {
+    margin-bottom: 0.75rem;
+}
+
+.event_data_metaboxes small {
+    color: #6c757d;
+}
+
+label sup {
+    color: red;
+    font-weight: bold;
+}
