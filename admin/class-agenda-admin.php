@@ -79,7 +79,10 @@ class Agenda_Admin {
 		 * class.
 		 */
 
+		wp_enqueue_style( 'bootstrap', 'https://unpkg.com/bootstrap/dist/css/bootstrap.min.css' );
+		wp_enqueue_style( 'bootstrap-vue', 'https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/agenda-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( 'agenda-monthly-view-admin', plugin_dir_url( __FILE__ ) . 'css/agenda-monthly-view-admin.css', array(), $this->version, 'all' );
 
 	}
 
@@ -102,8 +105,18 @@ class Agenda_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/agenda-admin.js', array( 'jquery' ), $this->version, false );
-
+		// wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/agenda-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'polyfill-IntersectionObserver', 'https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver' );		
+		wp_enqueue_script( 'vue', 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js' );
+		wp_enqueue_script( 'bootstrap-vue', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@latest/dist/bootstrap-vue.min.js' );
+		wp_enqueue_script( 'bootstrap-vue-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js' );
+		wp_enqueue_script( 'agenda-monthly-view-admin', plugin_dir_url( __FILE__ ) . 'js/agenda-monthly-view-admin.js', array( 'vue', 'wp-i18n' ), $this->version, true );
+ 
+		wp_set_script_translations( 
+			 'agenda-monthly-view-admin',
+			 'agenda',
+			 plugin_dir_path( __FILE__ ) . 'languages'
+		);
 	}
 
 	/**

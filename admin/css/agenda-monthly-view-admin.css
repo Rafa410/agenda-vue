@@ -1,0 +1,41 @@
+.calendar {
+    width: 100%;
+    max-width: min(35rem, 100%);
+    box-shadow: 0 5px 40px -15px rgb(0 0 0 / 25%);
+}
+
+.days-of-week span {
+    font-variant: small-caps;
+    font-weight: bold;
+    color: #6c757d;
+    letter-spacing: 0.1em;
+}
+
+.days-of-week,
+.date-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.single-date {
+    font-size: 1.25rem;
+    font-weight: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.1s 0.05s ease-out;
+    aspect-ratio: 1 / 1;
+    --first-day-of-month: 1;
+}
+
+.single-date:hover, .single-date:focus {
+    font-weight: 400;
+    background-color: #f0f4f8;
+    transition-delay: 0s;
+}
+
+.single-date:first-child {
+    grid-column: var(--first-day-of-month);
+}

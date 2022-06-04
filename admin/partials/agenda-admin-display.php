@@ -13,6 +13,4 @@
  */
 ?>
 
-<div class="wrap">
-	<h2><?= __( 'Agenda', 'agenda' ) ?></h2>
-</div>
+<div id="calendar-monthly-view-admin" class="wrap"></div>
