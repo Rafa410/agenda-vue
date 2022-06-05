@@ -86,10 +86,57 @@ const app = new Vue({
     data: {
         currentMonth: new Date().getMonth(),
         currentYear: new Date().getFullYear(),
+        cachedEvents: {},
     },
     methods: {
-        getEvents() {
-            return fetch('/wp-json/wp/v2/agenda_events').then((response) => response.json());
+        async getEvents(month = this.currentMonth, year = this.currentYear) {
+            const key = `${year}-${month + 1}`;
+
+            // Check if we have cached events for this month & year
+            if (key in this.cachedEvents) {
+                console.debug('cache hit:', key);
+                return this.cachedEvents[key];
+            }
+
+            // Build query params for the API
+            const params = new URLSearchParams({
+                month: month + 1,
+                year,
+            });
+            console.debug('cache miss:', params.toString());
+
+            // Fetch events from the API
+            const events = await fetch(`/wp-json/agenda/v1/events?${params.toString()}`).then(
+                (response) => response.json()
+            );
+
+            // Cache the events for this month & year
+            this.cachedEvents[key] = events;
+
+            return events;
+        },
+        preloadSurroundingMonths(month = this.currentMonth, year = this.currentYear, amount = 1) {
+            const surroundingMonths = [];
+
+            for (let i = 0; i < amount; i++) {
+                const prevMonth = new Date(year, month - 1 - i, 1);
+                const nextMonth = new Date(year, month + 1 + i, 1);
+
+                surroundingMonths.push({
+                    month: prevMonth.getMonth(),
+                    year: prevMonth.getFullYear(),
+                });
+                surroundingMonths.push({
+                    month: nextMonth.getMonth(),
+                    year: nextMonth.getFullYear(),
+                });
+            }
+
+            return Promise.all(
+                surroundingMonths.map((date) => {
+                    return this.getEvents(date.month, date.year);
+                })
+            );
         },
         updateDate(n) {
             this.currentMonth += n;
@@ -100,11 +147,15 @@ const app = new Vue({
                 this.currentMonth = 0;
                 this.currentYear++;
             }
+
+            this.getEvents().then((events) => {
+                this.preloadSurroundingMonths();
+            });
         },
     },
     mounted() {
         this.getEvents().then((events) => {
-            console.log(events);
+            this.preloadSurroundingMonths();
         });
     },
     template: `
