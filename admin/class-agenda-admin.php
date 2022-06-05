@@ -432,6 +432,8 @@ class Agenda_Admin {
 		register_rest_route( 'agenda/v1', '/events', array(
 			'methods' => 'GET',
 			'callback' => array( $this, 'agenta_events_rest_api_query' ),
+			'permission_callback' => '__return_true',
+
 		) );
 	}
 
