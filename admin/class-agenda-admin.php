@@ -107,11 +107,15 @@ class Agenda_Admin {
 		 */
 
 		// wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/agenda-admin.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'polyfill-IntersectionObserver', 'https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver' );		
-		wp_enqueue_script( 'vue', 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js' );
-		wp_enqueue_script( 'bootstrap-vue', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@latest/dist/bootstrap-vue.min.js' );
-		wp_enqueue_script( 'bootstrap-vue-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js' );
-		wp_enqueue_script( 'agenda-monthly-view-admin', plugin_dir_url( __FILE__ ) . 'js/agenda-monthly-view-admin.js', array( 'vue', 'wp-i18n' ), $this->version, true );
+		
+		// Only load this scripts if we're on the agenda admin page
+		if ( isset($_GET['page']) && $_GET['page'] === 'agenda' ) {
+			wp_enqueue_script( 'polyfill-IntersectionObserver', 'https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver' );		
+			wp_enqueue_script( 'vue', 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js' );
+			wp_enqueue_script( 'bootstrap-vue', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@latest/dist/bootstrap-vue.min.js' );
+			wp_enqueue_script( 'bootstrap-vue-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js' );
+			wp_enqueue_script( 'agenda-monthly-view-admin', plugin_dir_url( __FILE__ ) . 'js/agenda-monthly-view-admin.js', array( 'vue', 'wp-i18n' ), $this->version, true );
+		}
  
 		wp_set_script_translations( 
 			 'agenda-monthly-view-admin',
@@ -256,7 +260,7 @@ class Agenda_Admin {
 						name="event_link" 
 						id="event_link" 
 						value="<?= get_post_meta( $post->ID, 'event_link', true ); ?>" 
-						placeholder="https://www.example.com">
+						placeholder="https://">
 						<small><?= __( 'Opcional. Només quan l\'informació de l\'event està a una pàgina externa', 'agenda' ) ?></small>
 				</li>
 
@@ -484,17 +488,17 @@ class Agenda_Admin {
 
 				$event = array(
 					'id' => get_the_ID(),
-					'title' => get_the_title(),
-					'event_summary' => get_post_meta( get_the_ID(), 'event_summary', true ),
+					'title' => html_entity_decode( get_the_title() ),
+					'event_summary' => html_entity_decode ( get_post_meta( get_the_ID(), 'event_summary', true ) ),
 					'event_date' => get_post_meta( get_the_ID(), 'event_date', true ),
 					'event_time' => get_post_meta( get_the_ID(), 'event_time', true ),
 					'event_duration' => get_post_meta( get_the_ID(), 'event_duration', true ),
-					'event_location' => get_post_meta( get_the_ID(), 'event_location', true ),
+					'event_location' => html_entity_decode ( get_post_meta( get_the_ID(), 'event_location', true ) ),
 					'event_link' => get_post_meta( get_the_ID(), 'event_link', true ),
 					'link' => get_permalink(),
 					'status' => get_post_status(),
 					'content' => array(
-						'rendered' => get_the_content(),
+						'rendered' => html_entity_decode ( get_the_content() ),
 					),
 				);
 
