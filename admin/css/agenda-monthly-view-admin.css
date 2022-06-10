@@ -29,14 +29,14 @@
     align-items: center;
     border-radius: 50%;
     cursor: pointer;
-    transition: background-color 0.1s 0.05s ease-out;
+    /* transition: background-color 0.1s 0.05s ease-out; */
     aspect-ratio: 1 / 1;
 }
 
 .single-date:hover, .single-date:focus {
     font-weight: 400;
     background-color: #f0f4f8;
-    transition-delay: 0s;
+    /* transition-delay: 0s; */
 }
 
 .single-date:first-child {
@@ -76,4 +76,8 @@
 .scrollable .popover-body {
     max-height: 80vh;
     overflow-y: auto;
+}
+
+#event_date__outer_ {
+    position: static;
 }
