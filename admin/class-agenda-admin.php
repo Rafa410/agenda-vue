@@ -117,6 +117,13 @@ class Agenda_Admin {
 			wp_enqueue_script( 'agenda-monthly-view-admin', plugin_dir_url( __FILE__ ) . 'js/agenda-monthly-view-admin.js', array( 'vue', 'wp-i18n' ), $this->version, true );
 		}
  
+		// Define some API variables to be used in Vue.js
+		wp_localize_script( 'agenda-monthly-view-admin', 'wpApiSettings', array(
+			'root' => esc_url_raw( rest_url() ),
+			'nonce' => wp_create_nonce( 'wp_rest' )
+		) );
+
+		// Set translations for the Vue.js components
 		wp_set_script_translations( 
 			 'agenda-monthly-view-admin',
 			 'agenda',
@@ -414,7 +421,7 @@ class Agenda_Admin {
 	 * @since 1.0.0
 	 */
 	public function update_event_field( $value, $object, $field_name, $request ) {
-		if ( ! current_user_can( 'edit_post', $object['id'] ) ) {
+		if ( ! current_user_can( 'edit_post', $object->ID ) ) {
 			return new WP_Error( 
 				'rest_cannot_update', 
 				__( 'Sorry, you are not allowed to update this post.' ), 
@@ -424,7 +431,7 @@ class Agenda_Admin {
 
 		$value = sanitize_text_field( $value );
 
-		return update_post_meta( $object['id'], $field_name, $value );
+		return update_post_meta( $object->ID, $field_name, $value );
 	}
 
 	/**
@@ -500,6 +507,7 @@ class Agenda_Admin {
 					'content' => array(
 						'rendered' => html_entity_decode ( get_the_content() ),
 					),
+					'date_modified' => get_the_modified_date( 'U' ),
 				);
 
 				$events[] = $event;

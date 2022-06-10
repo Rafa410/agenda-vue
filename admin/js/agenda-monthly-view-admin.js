@@ -56,7 +56,8 @@ Vue.component('days-of-week', {
 });
 
 Vue.component('date-grid', {
-    props: ['month', 'year', 'cachedEvents'],
+    emits: ['update:event'],
+    props: ['month', 'year', 'cachedEvents', 'isUpdating'],
     data() {
         return {
             events: [],
@@ -72,9 +73,6 @@ Vue.component('date-grid', {
         },
         firstDayOfMonth() {
             return new Date(this.year, this.month, 1).getDay();
-        },
-        currentEvents() {
-            return this.cachedEvents[this.getDateKey()] || [];
         },
     },
     methods: {
@@ -92,8 +90,10 @@ Vue.component('date-grid', {
         },
     },
     watch: {
-        currentEvents(newEvents, oldEvents) {
-            this.events = newEvents || [];
+        isUpdating(isUpdating) {
+            if (!isUpdating) {
+                this.events = this.cachedEvents[this.getDateKey()] || [];
+            }
         },
     },
     template: `
@@ -104,13 +104,16 @@ Vue.component('date-grid', {
                 :day="day" 
                 :month="month"
                 :year="year"
-                :events="getSingleDateEvents(day)">
+                :events="getSingleDateEvents(day)"
+                :isUpdating="isUpdating"
+                @update:events="$emit('update:events', $event)">
             </single-date>
         </div>
     `,
 });
 
 Vue.component('single-date', {
+    emits: ['update:events'],
     props: {
         day: {
             type: Number,
@@ -128,7 +131,12 @@ Vue.component('single-date', {
             type: Array,
             default: () => [],
         },
+        isUpdating: {
+            type: Boolean,
+            default: false,
+        },
     },
+
     data() {
         return {
             isOpen: false,
@@ -138,10 +146,12 @@ Vue.component('single-date', {
             currentLocale: 'ca',
         };
     },
+
     created() {
         // Clone events so the user can edit them without affecting the original
         this.modifiedEvents = JSON.parse(JSON.stringify(this.events));
     },
+
     computed: {
         hasEvents() {
             return this.events.length > 0;
@@ -150,6 +160,14 @@ Vue.component('single-date', {
             return this.events.length === 1;
         },
     },
+
+    watch: {
+        events(newEvents) {
+            // Clone events
+            this.modifiedEvents = JSON.parse(JSON.stringify(newEvents));
+        },
+    },
+
     methods: {
         formatDateTime(day) {
             // Add leading zero if needed
@@ -185,7 +203,15 @@ Vue.component('single-date', {
                 this.event_date_state = false;
             }
             if (this.modifiedEvents[0].title && this.modifiedEvents[0].event_date) {
-                this.onClose();
+                this.$emit('update:events', this.modifiedEvents);
+
+                // Close the modal once the events have been updated
+                const unwatch = this.$watch('isUpdating', (isUpdating) => {
+                    if (!isUpdating) {
+                        this.onClose();
+                        unwatch();
+                    }
+                });
             }
         },
 
@@ -375,7 +401,9 @@ Vue.component('single-date', {
                     </b-form-group>
 
                     <div class="d-flex justify-content-between mt-3">
-                        <b-button @click="onClose" size="sm" variant="outline-danger">Cancelar</b-button>
+                        <b-button @click="onClose" size="sm" variant="outline-danger">
+                            {{ __('Cancelar', 'agenda') }}
+                        </b-button>
                         <b-button @click="onOk" size="sm" variant="outline-primary">Ok</b-button>
                     </div>
                 </div>
@@ -412,17 +440,18 @@ const app = new Vue({
         currentYear: new Date().getFullYear(),
         cachedEvents: {},
         isLoading: true,
+        isUpdating: false,
     },
     methods: {
         getDateKey(year = this.currentYear, month = this.currentMonth) {
             return `${year}-${month + 1}`;
         },
 
-        async getEvents(year = this.currentYear, month = this.currentMonth) {
+        async getEvents(year = this.currentYear, month = this.currentMonth, cache = true) {
             const key = this.getDateKey(year, month);
 
             // Check if we have cached events for this month & year
-            if (key in this.cachedEvents) {
+            if (cache && key in this.cachedEvents) {
                 console.debug('cache hit:', key);
                 return this.cachedEvents[key];
             }
@@ -443,6 +472,62 @@ const app = new Vue({
             this.cachedEvents[key] = events;
 
             return events;
+        },
+
+        async updateEvents(modifiedEvents) {
+            this.isUpdating = true;
+
+            Promise.all(
+                modifiedEvents.map(async (event) => {
+                    // Get fields to update
+                    const {
+                        id,
+                        title,
+                        event_summary,
+                        event_date,
+                        event_time,
+                        event_duration,
+                        event_location,
+                        event_link,
+                    } = event;
+
+                    // Update events with the API
+                    const response = await fetch(`/wp-json/wp/v2/agenda_events/${event.id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-WP-Nonce': wpApiSettings.nonce, // This is required by WP for security reasons
+                            // We don't need to set authentication here since it is already handled by WP using cookies
+                        },
+                        body: JSON.stringify({
+                            id,
+                            title,
+                            event_summary,
+                            event_date,
+                            event_time,
+                            event_duration,
+                            event_location,
+                            event_link,
+                        }),
+                    });
+                    return response.json();
+                })
+            )
+                .then((data) => {
+                    console.log(data);
+                    // Refresh cached events
+                    this.getEvents(this.currentYear, this.currentMonth, false)
+                        .catch((error) => {
+                            console.error(error);
+                        })
+                        .finally(() => {
+                            this.isUpdating = false;
+                        });
+                })
+                .catch((err) => {
+                    console.error(err);
+                    this.isUpdating = false;
+                });
         },
 
         preloadSurroundingMonths(month = this.currentMonth, year = this.currentYear, amount = 1) {
@@ -502,7 +587,12 @@ const app = new Vue({
                         <date-grid-skeleton :month="currentMonth" :year="currentYear" />
                     </template>
 
-                    <date-grid :month="currentMonth" :year="currentYear" :cachedEvents="cachedEvents" />
+                    <date-grid 
+                        :month="currentMonth" 
+                        :year="currentYear" 
+                        :cachedEvents="cachedEvents" 
+                        :isUpdating="isUpdating"
+                        @update:events="updateEvents" />
                 </b-skeleton-wrapper>
 
             </div>
