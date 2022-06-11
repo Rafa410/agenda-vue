@@ -56,7 +56,7 @@ Vue.component('days-of-week', {
 });
 
 Vue.component('date-grid', {
-    emits: ['update:event'],
+    emits: ['update:event', 'create:event'],
     props: ['month', 'year', 'cachedEvents', 'isUpdating'],
     data() {
         return {
@@ -106,14 +106,15 @@ Vue.component('date-grid', {
                 :year="year"
                 :events="getSingleDateEvents(day)"
                 :isUpdating="isUpdating"
-                @update:events="$emit('update:events', $event)">
+                @update:events="$emit('update:events', $event)"
+                @create:event="$emit('create:event', $event)">
             </single-date>
         </div>
     `,
 });
 
 Vue.component('single-date', {
-    emits: ['update:events'],
+    emits: ['update:events', 'create:event'],
     props: {
         day: {
             type: Number,
@@ -143,6 +144,15 @@ Vue.component('single-date', {
             modifiedEvents: [],
             event_title_state: null,
             event_date_state: null,
+            newEvent: {
+                title: '',
+                event_summary: '',
+                event_date: null,
+                event_time: null,
+                event_duration: null,
+                event_location: '',
+                event_url: '',
+            },
             currentLocale: 'ca',
         };
     },
@@ -196,22 +206,45 @@ Vue.component('single-date', {
         },
 
         onOk() {
-            if (!this.modifiedEvents[0].title) {
-                this.event_title_state = false;
-            }
-            if (!this.modifiedEvents[0].event_date) {
-                this.event_date_state = false;
-            }
-            if (this.modifiedEvents[0].title && this.modifiedEvents[0].event_date) {
-                this.$emit('update:events', this.modifiedEvents);
+            if (this.singleEvent) {
+                if (!this.modifiedEvents[0].title) {
+                    this.event_title_state = false;
+                }
+                if (!this.modifiedEvents[0].event_date) {
+                    this.event_date_state = false;
+                }
+                if (this.modifiedEvents[0].title && this.modifiedEvents[0].event_date) {
+                    this.$emit('update:events', this.modifiedEvents);
 
-                // Close the modal once the events have been updated
-                const unwatch = this.$watch('isUpdating', (isUpdating) => {
-                    if (!isUpdating) {
-                        this.onClose();
-                        unwatch();
-                    }
-                });
+                    // Close the modal once the events have been updated
+                    const unwatch = this.$watch('isUpdating', (isUpdating) => {
+                        if (!isUpdating) {
+                            this.onClose();
+                            unwatch();
+                        }
+                    });
+                }
+            } else if (!this.hasEvents) {
+                // Add new event
+
+                if (!this.newEvent.title) {
+                    this.event_title_state = false;
+                }
+                if (!this.newEvent.event_date) {
+                    this.event_date_state = false;
+                }
+                if (this.newEvent.title && this.newEvent.event_date) {
+                    // Check mandatory fields
+                    this.$emit('create:event', this.newEvent);
+
+                    // Close the modal once the event have been created
+                    const unwatchIsUpdating = this.$watch('isUpdating', (isUpdating) => {
+                        if (!isUpdating) {
+                            this.onClose();
+                            unwatchIsUpdating();
+                        }
+                    });
+                }
             }
         },
 
@@ -220,6 +253,15 @@ Vue.component('single-date', {
             this.modifiedEvents = JSON.parse(JSON.stringify(this.events));
             this.event_title_state = null;
             this.event_date_state = null;
+            this.newEvent = {
+                title: '',
+                event_summary: '',
+                event_date: null,
+                event_time: null,
+                event_duration: null,
+                event_location: '',
+                event_url: '',
+            };
         },
 
         onShown() {
@@ -256,7 +298,7 @@ Vue.component('single-date', {
             </button>
 
             <b-popover 
-                v-if="singleEvent" 
+                v-if="singleEvent || !hasEvents"" 
                 :target="'events-' + day + 'trigger'" 
                 triggers="click"
                 :show.sync="isOpen"
@@ -270,11 +312,15 @@ Vue.component('single-date', {
             >
 
                 <template #title>
-                    <strong class="pe-3">
+                    <strong v-if="singleEvent" class="pe-3 me-auto">
                         {{ __('Event del', 'agenda') }} {{ formatLocalizedDate(formatDateTime(day)) }}
                     </strong>
+                    <strong v-else class="pe-3 me-auto">
+                        {{ __('Crear nou event', 'agenda') }}
+                    </strong>
 
-                    <b-link 
+                    <b-link
+                        v-if="singleEvent" 
                         :href="'/wp-admin/post.php?post=' + events[0].id + '&action=edit'" 
                         target="_blank"
                         class="external-link p-1"
@@ -306,7 +352,7 @@ Vue.component('single-date', {
                         <b-form-input
                             ref="event_title"
                             id="event_title"
-                            v-model="modifiedEvents[0].title"
+                            v-model="modifiedEvents[0]?.title ?? newEvent.title"
                             :state="event_title_state"
                             size="sm"
                         ></b-form-input>
@@ -320,7 +366,7 @@ Vue.component('single-date', {
                         <b-form-input
                             ref="event_summary"
                             id="event_summary"
-                            v-model="modifiedEvents[0].event_summary"
+                            v-model="modifiedEvents[0]?.event_summary ?? newEvent.event_summary"
                             size="sm"
                         ></b-form-input>
                     </b-form-group>
@@ -335,7 +381,7 @@ Vue.component('single-date', {
                         <b-form-datepicker
                             ref="event_date"
                             id="event_date"
-                            v-model="modifiedEvents[0].event_date"
+                            v-model="modifiedEvents[0]?.event_date ?? newEvent.event_date"
                             :state="event_date_state"
                             size="sm"
                             :locale="currentLocale"
@@ -351,7 +397,7 @@ Vue.component('single-date', {
                         <b-form-timepicker
                             ref="event_time"
                             id="event_time"
-                            v-model="modifiedEvents[0].event_time"
+                            v-model="modifiedEvents[0]?.event_time ?? newEvent.event_time"
                             size="sm"
                             :locale="currentLocale"
                             :placeholder="htmlDecode(__('Selecciona la hora de l&#8217;event', 'agenda'))"
@@ -367,7 +413,7 @@ Vue.component('single-date', {
                             type="number"
                             ref="event_duration"
                             id="event_duration"
-                            v-model="modifiedEvents[0].event_duration"
+                            v-model="modifiedEvents[0]?.event_duration ?? newEvent.event_duration"
                             size="sm"
                         ></b-form-input>
                     </b-form-group>
@@ -380,7 +426,7 @@ Vue.component('single-date', {
                         <b-form-input
                             ref="event_location"
                             id="event_location"
-                            v-model="modifiedEvents[0].event_location"
+                            v-model="modifiedEvents[0]?.event_location ?? newEvent.event_location"
                             size="sm"
                         ></b-form-input>
                     </b-form-group>
@@ -394,7 +440,7 @@ Vue.component('single-date', {
                             type="url"
                             ref="event_link"
                             id="event_link"
-                            v-model="modifiedEvents[0].event_link"
+                            v-model="modifiedEvents[0]?.event_link ?? newEvent.event_link"
                             size="sm"
                             placeholder="https://"
                         ></b-form-input>
@@ -530,6 +576,43 @@ const app = new Vue({
                 });
         },
 
+        async createEvent(event) {
+            this.isUpdating = true;
+
+            // Create events with the API
+            const response = await fetch('/wp-json/wp/v2/agenda_events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': wpApiSettings.nonce, // This is required by WP for security reasons
+                    // We don't need to set authentication here since it is already handled by WP using cookies
+                },
+                body: JSON.stringify({
+                    title: event.title,
+                    event_summary: event.event_summary,
+                    event_date: event.event_date,
+                    event_time: event.event_time,
+                    event_duration: event.event_duration,
+                    event_location: event.event_location,
+                    event_link: event.event_link,
+                }),
+            });
+
+            response.json().then((data) => {
+                console.log(data);
+                this.createToast(data.id);
+
+                // Refresh cached events
+                this.getEvents(this.currentYear, this.currentMonth, false)
+                    .catch((error) => {
+                        console.error(error);
+                    })
+                    .finally(() => {
+                        this.isUpdating = false;
+                    });
+            });
+        },
+
         preloadSurroundingMonths(month = this.currentMonth, year = this.currentYear, amount = 1) {
             const surroundingMonths = [];
 
@@ -568,6 +651,20 @@ const app = new Vue({
                 this.preloadSurroundingMonths();
             });
         },
+
+        createToast(eventId) {
+            console.log('createToast root', eventId);
+            this.$root.$bvToast.toast(
+                'Per revisar els detalls del event i publicar-ho, fes clic a aquest enllaç.',
+                {
+                    variant: 'success',
+                    title: 'Esborrany creat correctament',
+                    href: `/wp-admin/post.php?post=${eventId}&action=edit`,
+                    autoHideDelay: 5000,
+                    noAutoHide: true,
+                }
+            );
+        },
     },
     mounted() {
         this.getEvents().then((events) => {
@@ -592,7 +689,8 @@ const app = new Vue({
                         :year="currentYear" 
                         :cachedEvents="cachedEvents" 
                         :isUpdating="isUpdating"
-                        @update:events="updateEvents" />
+                        @update:events="updateEvents"
+                        @create:event="createEvent" />
                 </b-skeleton-wrapper>
 
             </div>
