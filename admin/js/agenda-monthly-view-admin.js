@@ -489,10 +489,26 @@ const app = new Vue({
         isUpdating: false,
     },
     methods: {
+
+        /**
+         * Given a date, returns the key to access the events object
+         * 
+         * @param {number} year - The current year
+         * @param {number} month - The current month
+         * @returns {string} Key used to access the events object
+         */
         getDateKey(year = this.currentYear, month = this.currentMonth) {
             return `${year}-${month + 1}`;
         },
 
+        /**
+         * Given a date, returns the events for that date and caches them
+         * 
+         * @param {number} year - The current year
+         * @param {number} month - The current month
+         * @param {boolean} cache - Whether to get the events from the cache or not
+         * @returns {Promise<any>} Promise that resolves with the requested events
+         */
         async getEvents(year = this.currentYear, month = this.currentMonth, cache = true) {
             const key = this.getDateKey(year, month);
 
@@ -520,6 +536,11 @@ const app = new Vue({
             return events;
         },
 
+        /**
+         * Updates the specified events
+         * 
+         * @param {any[]} modifiedEvents - Array of events to be updated 
+         */
         async updateEvents(modifiedEvents) {
             this.isUpdating = true;
 
@@ -576,6 +597,11 @@ const app = new Vue({
                 });
         },
 
+        /**
+         * Creates a new event
+         * 
+         * @param {any} event - Event to be created
+         */
         async createEvent(event) {
             this.isUpdating = true;
 
@@ -613,6 +639,14 @@ const app = new Vue({
             });
         },
 
+        /**
+         * Preloads and saves in cache the events for the surrounding months
+         * 
+         * @param {number} month -
+         * @param {number} year -
+         * @param {number} amount - 
+         * @returns {Promise<any>} Promise that resolves with the requested events
+         */
         preloadSurroundingMonths(month = this.currentMonth, year = this.currentYear, amount = 1) {
             const surroundingMonths = [];
 
@@ -637,6 +671,11 @@ const app = new Vue({
             );
         },
 
+        /**
+         * Updates the current month and loads events accordingly
+         * 
+         * @param {number} n - Number of months to go backwards (<0) or forwards (>0)
+         */
         updateDate(n) {
             this.currentMonth += n;
             if (this.currentMonth < 0) {
@@ -652,6 +691,11 @@ const app = new Vue({
             });
         },
 
+        /**
+         * Generates a notification toast when an event is created
+         * 
+         * @param {number} eventId - ID of the newly created event
+         */
         createToast(eventId) {
             console.log('createToast root', eventId);
             this.$root.$bvToast.toast(
