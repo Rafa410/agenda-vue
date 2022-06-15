@@ -1,3 +1,22 @@
+/** Bootstrap v5 **/
+.justify-content-evenly {
+    justify-content: space-evenly;
+}
+
+.fs-4 {
+    font-size: calc(1.275rem + 0.3vw);
+}
+@media (min-width: 1200px) {
+    .fs-4 {
+        font-size: 1.5rem;
+    }
+}
+
+.b-toaster {
+    z-index: 99999;
+}
+/** End Bootstrap v5 **/
+
 .calendar {
     width: 100%;
     max-width: min(35rem, 100%);

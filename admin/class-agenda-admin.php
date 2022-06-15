@@ -80,7 +80,7 @@ class Agenda_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( 'bootstrap', 'https://unpkg.com/bootstrap/dist/css/bootstrap.min.css' );
+		wp_enqueue_style( 'bootstrap', 'https://unpkg.com/bootstrap@4/dist/css/bootstrap.min.css' );
 		wp_enqueue_style( 'bootstrap-vue', 'https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/agenda-admin.css', array(), $this->version, 'all' );
 		wp_enqueue_style( 'agenda-monthly-view-admin', plugin_dir_url( __FILE__ ) . 'css/agenda-monthly-view-admin.css', array(), $this->version, 'all' );
@@ -213,9 +213,7 @@ class Agenda_Admin {
 					<label for="event_summary"><?= __( 'Resum de l\'event', 'agenda' ) ?></label>
 					<textarea 
 						name="event_summary" 
-						id="event_summary" >
-						<?= get_post_meta( $post->ID, 'event_summary', true ) ?>
-					</textarea>
+						id="event_summary" ><?= get_post_meta( $post->ID, 'event_summary', true ) ?></textarea>
 					<small><?= __( 'Si no s\'introdueix un resum, es generarà automàticament a partir del contingut.', 'noticeboard' ) ?></small>
 				</li>
 
