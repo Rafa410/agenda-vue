@@ -56,7 +56,7 @@ Vue.component('days-of-week', {
 });
 
 Vue.component('date-grid', {
-    emits: ['update:event', 'create:event'],
+    emits: ['update:event', 'create:event', 'delete:event'],
     props: ['month', 'year', 'cachedEvents', 'isUpdating'],
     data() {
         return {
@@ -107,14 +107,15 @@ Vue.component('date-grid', {
                 :events="getSingleDateEvents(day)"
                 :isUpdating="isUpdating"
                 @update:events="$emit('update:events', $event)"
-                @create:event="$emit('create:event', $event)">
+                @create:event="$emit('create:event', $event)"
+                @delete:event="$emit('delete:event', $event)">
             </single-date>
         </div>
     `,
 });
 
 Vue.component('single-date', {
-    emits: ['update:events', 'create:event'],
+    emits: ['update:events', 'create:event', 'delete:event'],
     props: {
         day: {
             type: Number,
@@ -233,8 +234,9 @@ Vue.component('single-date', {
                 if (!this.newEvent.event_date) {
                     this.event_date_state = false;
                 }
+
+                // Check mandatory fields
                 if (this.newEvent.title && this.newEvent.event_date) {
-                    // Check mandatory fields
                     this.$emit('create:event', this.newEvent);
 
                     // Close the modal once the event have been created
@@ -245,6 +247,19 @@ Vue.component('single-date', {
                         }
                     });
                 }
+            }
+        },
+
+        onDelete() {
+            if (this.singleEvent) {
+                this.$emit('delete:event', this.modifiedEvents[0].id);
+
+                const unwatchIsUpdating = this.$watch('isUpdating', (isUpdating) => {
+                    if (!isUpdating) {
+                        this.onClose();
+                        unwatchIsUpdating();
+                    }
+                });
             }
         },
 
@@ -312,10 +327,10 @@ Vue.component('single-date', {
             >
 
                 <template #title>
-                    <strong v-if="singleEvent" class="pe-3 me-auto">
+                    <strong v-if="singleEvent" class="pe-3 mr-auto">
                         {{ __('Event del', 'agenda') }} {{ formatLocalizedDate(formatDateTime(day)) }}
                     </strong>
-                    <strong v-else class="pe-3 me-auto">
+                    <strong v-else class="pe-3 mr-auto">
                         {{ __('Crear nou event', 'agenda') }}
                     </strong>
 
@@ -333,6 +348,16 @@ Vue.component('single-date', {
                     </b-link>
 
                     <button 
+                        v-if="singleEvent"
+                        @click="onDelete" 
+                        class="btn p-1" 
+                        v-b-tooltip
+                        :title="__('Eliminar event', 'agenda')">
+                        <b-icon icon="trash" />
+                    </button>
+
+                    <button 
+                        v-else
                         @click="onClose" 
                         class="btn popover-close p-1" 
                         v-b-tooltip
@@ -489,10 +514,9 @@ const app = new Vue({
         isUpdating: false,
     },
     methods: {
-
         /**
          * Given a date, returns the key to access the events object
-         * 
+         *
          * @param {number} year - The current year
          * @param {number} month - The current month
          * @returns {string} Key used to access the events object
@@ -503,7 +527,7 @@ const app = new Vue({
 
         /**
          * Given a date, returns the events for that date and caches them
-         * 
+         *
          * @param {number} year - The current year
          * @param {number} month - The current month
          * @param {boolean} cache - Whether to get the events from the cache or not
@@ -538,8 +562,8 @@ const app = new Vue({
 
         /**
          * Updates the specified events
-         * 
-         * @param {any[]} modifiedEvents - Array of events to be updated 
+         *
+         * @param {any[]} modifiedEvents - Array of events to be updated
          */
         async updateEvents(modifiedEvents) {
             this.isUpdating = true;
@@ -598,8 +622,46 @@ const app = new Vue({
         },
 
         /**
+         * Deletes the specified event
+         *
+         * @param {number} eventId
+         */
+        deleteEvent(eventId) {
+            if (!confirm(__('Estàs segur de que vols eliminar aquest event?', 'agenda'))) {
+                return;
+            }
+
+            this.isUpdating = true;
+
+            fetch(`/wp-json/wp/v2/agenda_events/${eventId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': wpApiSettings.nonce, // This is required by WP for security reasons
+                    // We don't need to set authentication here since it is already handled by WP using cookies
+                },
+            })
+                .then((response) => {
+                    console.debug(response);
+
+                    // Refresh cached events
+                    this.getEvents(this.currentYear, this.currentMonth, false)
+                        .catch((error) => {
+                            console.error(error);
+                        })
+                        .finally(() => {
+                            this.isUpdating = false;
+                        });
+                })
+                .catch((err) => {
+                    console.error(err);
+                    this.isUpdating = false;
+                });
+        },
+
+        /**
          * Creates a new event
-         * 
+         *
          * @param {any} event - Event to be created
          */
         async createEvent(event) {
@@ -641,10 +703,10 @@ const app = new Vue({
 
         /**
          * Preloads and saves in cache the events for the surrounding months
-         * 
+         *
          * @param {number} month -
          * @param {number} year -
-         * @param {number} amount - 
+         * @param {number} amount -
          * @returns {Promise<any>} Promise that resolves with the requested events
          */
         preloadSurroundingMonths(month = this.currentMonth, year = this.currentYear, amount = 1) {
@@ -673,7 +735,7 @@ const app = new Vue({
 
         /**
          * Updates the current month and loads events accordingly
-         * 
+         *
          * @param {number} n - Number of months to go backwards (<0) or forwards (>0)
          */
         updateDate(n) {
@@ -693,13 +755,13 @@ const app = new Vue({
 
         /**
          * Generates a notification toast when an event is created
-         * 
+         *
          * @param {number} eventId - ID of the newly created event
          */
         createToast(eventId) {
             console.log('createToast root', eventId);
             this.$root.$bvToast.toast(
-                'Per revisar els detalls del event i publicar-ho, fes clic a aquest enllaç.',
+                'Per revisar els detalls del event i publicar-ho, fes clic aquí.',
                 {
                     variant: 'success',
                     title: 'Esborrany creat correctament',
@@ -734,7 +796,8 @@ const app = new Vue({
                         :cachedEvents="cachedEvents" 
                         :isUpdating="isUpdating"
                         @update:events="updateEvents"
-                        @create:event="createEvent" />
+                        @create:event="createEvent"
+                        @delete:event="deleteEvent" />
                 </b-skeleton-wrapper>
 
             </div>
