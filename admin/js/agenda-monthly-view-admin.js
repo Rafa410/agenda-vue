@@ -1,4 +1,4 @@
-const { __, _x, _n, _nx } = wp.i18n;
+const { __, _x, _n, _nx, sprintf } = wp.i18n;
 
 Vue.component('month-indicator', {
     props: ['month', 'year'],
@@ -313,7 +313,7 @@ Vue.component('single-date', {
             </button>
 
             <b-popover 
-                v-if="singleEvent || !hasEvents"" 
+                v-if="singleEvent || !hasEvents" 
                 :target="'events-' + day + 'trigger'" 
                 triggers="click"
                 :show.sync="isOpen"
