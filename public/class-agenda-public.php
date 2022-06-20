@@ -97,8 +97,17 @@ class Agenda_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/agenda-public.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'wp_vue', 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js', array(), null, true );
-		wp_enqueue_script( 'agenda-monthly-view', plugin_dir_url( __FILE__ ) . 'js/agenda-monthly-view.js', array( 'wp_vue' ), $this->version, true );
+		wp_enqueue_script( 'polyfill-IntersectionObserver', 'https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver' );		
+		wp_enqueue_script( 'vue', 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js', array(), null, true );
+		wp_enqueue_script( 'bootstrap-vue', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@latest/dist/bootstrap-vue.min.js', array(), null, true );
+		wp_enqueue_script( 'bootstrap-vue-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js', array(), null, true );
+		wp_enqueue_script( 'agenda-monthly-view', plugin_dir_url( __FILE__ ) . 'js/agenda-monthly-view.js', array( 'vue', 'wp-i18n' ), $this->version, true );
+
+		// Define some variables to be used in Vue.js
+		wp_localize_script( 'agenda-monthly-view', 'wpSettings', array(
+			'api_url' => esc_url_raw( rest_url() ),
+			'calendar_id' => wp_generate_password( 5, false ),
+		) );
 
 	}
 

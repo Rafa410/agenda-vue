@@ -1,0 +1,98 @@
+/** Bootstrap v5 **/
+.justify-content-evenly {
+    justify-content: space-evenly;
+}
+
+.fs-4 {
+    font-size: calc(1.275rem + 0.3vw);
+}
+
+@media (min-width: 1200px) {
+    .fs-4 {
+        font-size: 1.5rem;
+    }
+}
+
+/** End Bootstrap v5 **/
+
+.calendar-monthly-view {
+    
+}
+
+.days-of-week span {
+    font-variant: small-caps;
+    font-weight: 500;
+    color: #6c757d;
+    letter-spacing: 0.1em;
+}
+
+.days-of-week,
+.date-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.date-grid {
+    --first-day-of-month: 1;
+}
+
+.single-date {
+    font-size: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1;
+}
+
+.single-date > button {
+    font-weight: 100;
+    cursor: auto !important;
+}
+
+.single-date:first-child {
+    grid-column: var(--first-day-of-month);
+}
+
+.single-date.has-events {
+    background-color: #2d4419;
+}
+
+.single-date.has-events > button {
+    cursor: pointer !important;
+    color: #fff;
+}
+
+.btn-unstyled {
+    background: transparent;
+    border: 0;
+    appearance: none;
+    padding: 0;
+}
+
+.single-date .btn-unstyled {
+    width: 100%;
+    height: 100%;
+}
+
+.popover {
+    margin: 1rem;
+}
+
+.popover-header {
+    display: flex;
+    align-items: center;
+}
+
+.btn.popover-close {
+    line-height: normal;
+    font-size: 1.5rem;
+}
+
+.scrollable .popover-body {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#event_date__outer_ {
+    position: static;
+}
