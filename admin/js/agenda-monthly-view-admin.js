@@ -74,6 +74,9 @@ Vue.component('date-grid', {
         firstDayOfMonth() {
             return new Date(this.year, this.month, 1).getDay();
         },
+        currentDateKey() {
+            return `${this.year}-${+this.month + 1}`;
+        },
     },
     methods: {
         getDateKey(year = this.year, month = this.month) {
@@ -94,6 +97,9 @@ Vue.component('date-grid', {
             if (!isUpdating) {
                 this.events = this.cachedEvents[this.getDateKey()] || [];
             }
+        },
+        currentDateKey(dateKey) {
+            this.events = this.cachedEvents[dateKey] || [];
         },
     },
     template: `
