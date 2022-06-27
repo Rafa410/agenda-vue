@@ -342,9 +342,9 @@ const app = new Vue({
             });
 
             // Fetch events from the API
-            const events = await fetch(`/wp-json/agenda/v1/events?${params.toString()}`).then(
-                (response) => response.json()
-            );
+            const events = await fetch(
+                `${wpSettings.api_url}agenda/v1/events?${params.toString()}`
+            ).then((response) => response.json());
 
             // Cache the events for this month & year
             this.cachedEvents[key] = events;

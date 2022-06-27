@@ -119,7 +119,7 @@ class Agenda_Admin {
  
 		// Define some API variables to be used in Vue.js
 		wp_localize_script( 'agenda-monthly-view-admin', 'wpApiSettings', array(
-			'root' => esc_url_raw( rest_url() ),
+			'api_url' => esc_url_raw( rest_url() ),
 			'nonce' => wp_create_nonce( 'wp_rest' )
 		) );
 

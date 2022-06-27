@@ -556,9 +556,9 @@ const app = new Vue({
             console.debug('cache miss:', params.toString());
 
             // Fetch events from the API
-            const events = await fetch(`/wp-json/agenda/v1/events?${params.toString()}`).then(
-                (response) => response.json()
-            );
+            const events = await fetch(
+                `${wpApiSettings.api_url}agenda/v1/events?${params.toString()}`
+            ).then((response) => response.json());
 
             // Cache the events for this month & year
             this.cachedEvents[key] = events;
@@ -589,24 +589,27 @@ const app = new Vue({
                     } = event;
 
                     // Update events with the API
-                    const response = await fetch(`/wp-json/wp/v2/agenda_events/${event.id}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-WP-Nonce': wpApiSettings.nonce, // This is required by WP for security reasons
-                            // We don't need to set authentication here since it is already handled by WP using cookies
-                        },
-                        body: JSON.stringify({
-                            id,
-                            title,
-                            event_summary,
-                            event_date,
-                            event_time,
-                            event_duration,
-                            event_location,
-                            event_link,
-                        }),
-                    });
+                    const response = await fetch(
+                        `${wpApiSettings.api_url}wp/v2/agenda_events/${event.id}`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-WP-Nonce': wpApiSettings.nonce, // This is required by WP for security reasons
+                                // We don't need to set authentication here since it is already handled by WP using cookies
+                            },
+                            body: JSON.stringify({
+                                id,
+                                title,
+                                event_summary,
+                                event_date,
+                                event_time,
+                                event_duration,
+                                event_location,
+                                event_link,
+                            }),
+                        }
+                    );
                     return response.json();
                 })
             )
@@ -639,7 +642,7 @@ const app = new Vue({
 
             this.isUpdating = true;
 
-            fetch(`/wp-json/wp/v2/agenda_events/${eventId}`, {
+            fetch(`${wpApiSettings.api_url}wp/v2/agenda_events/${eventId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
