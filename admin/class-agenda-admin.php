@@ -111,7 +111,7 @@ class Agenda_Admin {
 		// Only load this scripts if we're on the agenda admin page
 		if ( isset($_GET['page']) && $_GET['page'] === 'agenda' ) {
 			wp_enqueue_script( 'polyfill-IntersectionObserver', 'https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver' );		
-			wp_enqueue_script( 'vue', 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js' );
+			wp_enqueue_script( 'vue', 'https://cdn.jsdelivr.net/npm/vue@2.6/dist/vue.js' );
 			wp_enqueue_script( 'bootstrap-vue', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@latest/dist/bootstrap-vue.min.js' );
 			wp_enqueue_script( 'bootstrap-vue-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js' );
 			wp_enqueue_script( 'agenda-monthly-view-admin', plugin_dir_url( __FILE__ ) . 'js/agenda-monthly-view-admin.js', array( 'vue', 'wp-i18n' ), $this->version, true );
