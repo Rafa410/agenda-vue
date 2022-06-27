@@ -105,6 +105,7 @@ class Agenda_Public {
 
 		// Define some variables to be used in Vue.js
 		wp_localize_script( 'agenda-monthly-view', 'wpSettings', array(
+			'site_url' => site_url(),
 			'api_url' => esc_url_raw( rest_url() ),
 			'calendar_id' => wp_generate_password( 5, false ),
 		) );

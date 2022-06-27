@@ -174,6 +174,10 @@ Vue.component('single-date', {
             return doc.documentElement.textContent;
         },
 
+        getSingleEventUrl(eventId) {
+            return `${wpSettings?.site_url || ''}/?p=${eventId}`;
+        },
+
         onClose() {
             this.isOpen = false;
         },
@@ -210,7 +214,7 @@ Vue.component('single-date', {
 
                         <b-link
                             v-if="singleEvent" 
-                            :href="'/?p=' + events[0].id" 
+                            :href="getSingleEventUrl(events[0].id)"" 
                             target="_blank"
                             class="external-link p-1"
                             data-bs-toggle="tooltip"

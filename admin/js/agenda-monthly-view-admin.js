@@ -208,6 +208,10 @@ Vue.component('single-date', {
             return doc.documentElement.textContent;
         },
 
+        getSingleEventAdminUrl(eventId) {
+            return `${wpApiSettings?.site_url || ''}/wp-admin/post.php?post=${eventId}&action=edit`;
+        },
+
         onClose() {
             this.isOpen = false;
         },
@@ -342,7 +346,7 @@ Vue.component('single-date', {
 
                     <b-link
                         v-if="singleEvent" 
-                        :href="'/wp-admin/post.php?post=' + events[0].id + '&action=edit'" 
+                        :href="getSingleEventAdminUrl(events[0].id)" 
                         target="_blank"
                         class="external-link p-1"
                         v-b-tooltip
@@ -774,7 +778,7 @@ const app = new Vue({
                 {
                     variant: 'success',
                     title: 'Esborrany creat correctament',
-                    href: `/wp-admin/post.php?post=${eventId}&action=edit`,
+                    href: getSingleEventAdminUrl(eventId),
                     autoHideDelay: 5000,
                     noAutoHide: true,
                 }
