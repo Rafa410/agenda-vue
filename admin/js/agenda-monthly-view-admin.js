@@ -385,9 +385,18 @@ Vue.component('single-date', {
                         :invalid-feedback="__('El títol és obligatori', 'agenda')"
                     >
                         <b-form-input
+                            v-if="modifiedEvents[0]?.title"
                             ref="event_title"
                             id="event_title"
-                            v-model="modifiedEvents[0]?.title ?? newEvent.title"
+                            v-model="modifiedEvents[0].title"
+                            :state="event_title_state"
+                            size="sm"
+                        ></b-form-input>
+                        <b-form-input
+                            v-else
+                            ref="event_title"
+                            id="event_title"
+                            v-model="newEvent.title"
                             :state="event_title_state"
                             size="sm"
                         ></b-form-input>
@@ -399,9 +408,17 @@ Vue.component('single-date', {
                         class="mb-1"
                     >
                         <b-form-input
+                            v-if="modifiedEvents[0]?.event_summary"
                             ref="event_summary"
                             id="event_summary"
-                            v-model="modifiedEvents[0]?.event_summary ?? newEvent.event_summary"
+                            v-model="modifiedEvents[0].event_summary"
+                            size="sm"
+                        ></b-form-input>
+                        <b-form-input
+                            v-else
+                            ref="event_summary"
+                            id="event_summary"
+                            v-model="newEvent.event_summary"
                             size="sm"
                         ></b-form-input>
                     </b-form-group>
@@ -414,9 +431,20 @@ Vue.component('single-date', {
                         :invalid-feedback="__('Introdueix una data', 'agenda')"
                     >
                         <b-form-datepicker
+                            v-if="modifiedEvents[0]?.event_date"
                             ref="event_date"
                             id="event_date"
-                            v-model="modifiedEvents[0]?.event_date ?? newEvent.event_date"
+                            v-model="modifiedEvents[0].event_date"
+                            :state="event_date_state"
+                            size="sm"
+                            :locale="currentLocale"
+                            :placeholder="htmlDecode(__('Selecciona la data de l&#8217;event', 'agenda'))"
+                        ></b-form-datepicker>
+                        <b-form-datepicker
+                            v-else
+                            ref="event_date"
+                            id="event_date"
+                            v-model="newEvent.event_date"
                             :state="event_date_state"
                             size="sm"
                             :locale="currentLocale"
@@ -430,9 +458,19 @@ Vue.component('single-date', {
                         class="mb-1"
                     >
                         <b-form-timepicker
+                            v-if="modifiedEvents[0]?.event_time"
                             ref="event_time"
                             id="event_time"
-                            v-model="modifiedEvents[0]?.event_time ?? newEvent.event_time"
+                            v-model="modifiedEvents[0].event_time"
+                            size="sm"
+                            :locale="currentLocale"
+                            :placeholder="htmlDecode(__('Selecciona la hora de l&#8217;event', 'agenda'))"
+                        ></b-form-timepicker>
+                        <b-form-timepicker
+                            v-else
+                            ref="event_time"
+                            id="event_time"
+                            v-model="newEvent.event_time"
                             size="sm"
                             :locale="currentLocale"
                             :placeholder="htmlDecode(__('Selecciona la hora de l&#8217;event', 'agenda'))"
@@ -445,10 +483,19 @@ Vue.component('single-date', {
                         class="mb-1"
                     >
                         <b-form-input
+                            v-if="modifiedEvents[0]?.event_duration"
                             type="number"
                             ref="event_duration"
                             id="event_duration"
-                            v-model="modifiedEvents[0]?.event_duration ?? newEvent.event_duration"
+                            v-model="modifiedEvents[0].event_duration"
+                            size="sm"
+                        ></b-form-input>
+                        <b-form-input
+                            v-else
+                            type="number"
+                            ref="event_duration"
+                            id="event_duration"
+                            v-model="newEvent.event_duration"
                             size="sm"
                         ></b-form-input>
                     </b-form-group>
@@ -459,9 +506,17 @@ Vue.component('single-date', {
                         class="mb-1"
                     >
                         <b-form-input
+                            v-if="modifiedEvents[0]?.event_location"
                             ref="event_location"
                             id="event_location"
-                            v-model="modifiedEvents[0]?.event_location ?? newEvent.event_location"
+                            v-model="modifiedEvents[0].event_location"
+                            size="sm"
+                        ></b-form-input>
+                        <b-form-input
+                            v-else
+                            ref="event_location"
+                            id="event_location"
+                            v-model="newEvent.event_location"
                             size="sm"
                         ></b-form-input>
                     </b-form-group>
@@ -472,10 +527,20 @@ Vue.component('single-date', {
                         class="mb-1"
                     >
                         <b-form-input
+                            v-if="modifiedEvents[0]?.event_link"
                             type="url"
                             ref="event_link"
                             id="event_link"
-                            v-model="modifiedEvents[0]?.event_link ?? newEvent.event_link"
+                            v-model="modifiedEvents[0].event_link"
+                            size="sm"
+                            placeholder="https://"
+                        ></b-form-input>
+                        <b-form-input
+                            v-else
+                            type="url"
+                            ref="event_link"
+                            id="event_link"
+                            v-model="newEvent.event_link"
                             size="sm"
                             placeholder="https://"
                         ></b-form-input>
@@ -767,6 +832,16 @@ const app = new Vue({
         },
 
         /**
+         * Generates the admin URL for a single event
+         *
+         * @param {number} eventId ID of the event
+         * @returns {string} Admin URL to the event
+         */
+        getSingleEventAdminUrl(eventId) {
+            return `${wpApiSettings?.site_url || ''}/wp-admin/post.php?post=${eventId}&action=edit`;
+        },
+
+        /**
          * Generates a notification toast when an event is created
          *
          * @param {number} eventId - ID of the newly created event
@@ -778,7 +853,7 @@ const app = new Vue({
                 {
                     variant: 'success',
                     title: 'Esborrany creat correctament',
-                    href: getSingleEventAdminUrl(eventId),
+                    href: this.getSingleEventAdminUrl(eventId),
                     autoHideDelay: 5000,
                     noAutoHide: true,
                 }
