@@ -415,7 +415,7 @@ const app = new Vue({
         });
     },
     template: `
-        <div class="calendar-monthly-view text-center p-3 my-4 mx-auto">
+        <div class="calendar-monthly-view text-center p-lg-3 my-4 mx-auto">
             <month-indicator @change-month="updateDate" :month="currentMonth" :year="currentYear" />
             <days-of-week />
 
