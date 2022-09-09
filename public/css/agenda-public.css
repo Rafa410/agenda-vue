@@ -15,10 +15,6 @@
 
 /** End Bootstrap v5 **/
 
-.calendar-monthly-view {
-    
-}
-
 .days-of-week span {
     font-variant: small-caps;
     font-weight: 500;
@@ -54,12 +50,12 @@
 }
 
 .single-date.has-events {
-    background-color: #2d4419;
+    background-color: #e0cc39;
 }
 
 .single-date.has-events > button {
     cursor: pointer !important;
-    color: #fff;
+    font-weight: 500;
 }
 
 .btn-unstyled {
