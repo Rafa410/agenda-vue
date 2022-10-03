@@ -119,6 +119,7 @@ class Agenda_Public {
 	 */
 	function register_shortcodes() {
 		add_shortcode( 'agenda', array( $this, 'shortcode_agenda_handler' ) );
+		add_shortcode( 'agenda_archive', array( $this, 'shortcode_agenda_archive_handler' ) );
 	}
 
 	/**
@@ -248,6 +249,130 @@ class Agenda_Public {
 			}
 		} else {
 			$output .= '<p>' . __( 'No hay próximos eventos', 'agenda' ) . '</p>';
+		}
+
+		$output .= '</div>';
+
+		return $output;
+	}
+
+	/**
+	 * Generates the content of the agenda archive shortcode
+	 * 
+	 * @param array $atts Shortcode attributes
+	 * 
+	 * @return string
+	 */
+	function shortcode_agenda_archive_handler( $atts ) {
+		// Don't load the scripts if Elementor preview is active
+		if ( is_plugin_active( 'elementor/elementor.php' ) && \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+			return '<div id="agenda-vue-placeholder"></div>';
+		}
+
+		// Enqueue registered scripts
+		wp_enqueue_script( 'agenda-archive-view' );
+
+		$atts = shortcode_atts( array(
+			'posts_per_page' => 6, // Number of activities to show per page
+		), $atts, 'agenda_archive' );
+
+		$output = $this->generate_agenda_archive( $atts['posts_per_page'] );
+
+		return $output;
+	}
+
+	/**
+	 * Generates the content of the agenda archive
+	 * 
+	 * @param int $posts_per_page Number of activities to show per page
+	 * 
+	 * @return string
+	 */
+	function generate_agenda_archive( $posts_per_page ) {
+		$args = array(
+			'post_type' => 'agenda_events',
+			'posts_per_page' => $posts_per_page,
+			'meta_key' => 'event_date',
+			'orderby' => 'meta_value',
+			'order' => 'ASC',
+			'meta_query' => array(
+				array(
+					'key' => 'event_date',
+					'value' => date( 'Y-m-d' ),
+					'compare' => '>=',
+					'type' => 'DATE'
+				)
+			),
+		);
+
+		$query = new WP_Query( $args );
+
+		$output = '<div id="agenda-archive">';
+
+		if ( $query->have_posts() ) {
+
+			$output .= '<div class="agenda-activities-list">';
+
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				$ID = get_the_ID();
+
+				$title = get_the_title();
+				$summary = get_post_meta( $ID, 'event_summary', true );
+				$date = get_post_meta( $ID, 'event_date', true );
+				$time = get_post_meta( $ID, 'event_time', true );
+				$duration = get_post_meta( $ID, 'event_duration', true );
+				$location = get_post_meta( $ID, 'event_location', true );
+				$link = get_post_meta( $ID, 'event_link', true );
+
+				if ( ! $summary ) {
+					$summary = get_the_excerpt();
+				}
+
+				$summary = wp_trim_words( $summary, 50, ' [...]' );
+
+				if ( ! $link ) {
+					$link = get_the_permalink();
+				}
+				
+				ob_start();
+				?>
+
+				<article id="activity-<?= $ID ?>" class="activity">
+					<div class="activity__image ratio ratio-1x1">
+						<!-- <?= get_the_post_thumbnail( $ID, 'medium' ); ?> -->
+						<img src="//source.unsplash.com/random/300x300" alt="" class="img-fluid">
+					</div>
+					<div class="activity__content">
+						<h3 class="activity__title entry-title">
+							<a href="<?= esc_url( $link ) ?>">
+								<?= $title ?>
+							</a>
+						</h3>
+						<p class="activity__summary"><?= $summary ?></p>
+					</div>
+				</article>
+
+				<?php 
+				$output .= ob_get_clean();
+			}
+
+			$output .= '</div>';
+
+			// Pagination
+			$output .= '<div class="agenda-activities-pagination">';
+			$output .= paginate_links( array(
+				'base' => get_pagenum_link( 1 ) . '%_%',
+				'format' => 'page/%#%',
+				'current' => max( 1, get_query_var( 'paged' ) ),
+				'total' => $query->max_num_pages,
+				// 'prev_text' => __( 'Anterior', 'agenda' ),
+				// 'next_text' => __( 'Siguiente', 'agenda' ),
+			) );
+			$output .= '</div>';
+
+		} else {
+			$output .= '<p class="fw-light text-muted fs-5">' . __( 'No hay próximas actividades', 'agenda' ) . '</p>';
 		}
 
 		$output .= '</div>';
