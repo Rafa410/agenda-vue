@@ -154,11 +154,16 @@ class Agenda_Admin {
 			'labels' 		=> $labels, 									// Specific labels for this post type, e.g. Plugin name
 			'public' 		=> true, 										// Whether or not this post type is exposed to the public
 			'show_in_menu'	=> $this->plugin_name, 							// Where to show this post type in the admin menu
-			'supports' 		=> array( 'title', 'editor', 'custom_fields'),	// Features this post type supports
+			'supports' 		=> array( 										// Features this post type supports
+				'title', 
+				'editor', 
+				'thumbnail', 
+				'custom_fields'
+			),
 			'has_archive' 	=> false, 										// We don't need an archive since we build our own templates using The Loop
 			'menu_icon' 	=> 'dashicons-calendar', 						// Icon to use for this post type in the admin menu
 			'rewrite'     	=> array(									
-				'slug' 		=> _x( 'events', 'slug', 'agenda' )			// Custom slug (URL) for this post type
+				'slug' 		=> _x( 'events', 'slug', 'agenda' )				// Custom slug (URL) for this post type
 			),
 			'show_in_rest' 	=> true, 										// Allow Gutenberg editor to use this post type
 		);
