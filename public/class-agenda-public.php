@@ -253,6 +253,8 @@ class Agenda_Public {
 
 		$output .= '</div>';
 
+		wp_reset_postdata();
+
 		return $output;
 	}
 
@@ -339,10 +341,9 @@ class Agenda_Public {
 				?>
 
 				<article id="activity-<?= $ID ?>" class="activity">
-					<div class="activity__image ratio ratio-1x1">
-						<!-- <?= get_the_post_thumbnail( $ID, 'medium' ); ?> -->
-						<img src="//source.unsplash.com/random/300x300" alt="" class="img-fluid">
-					</div>
+					<a href="<?= esc_url( $link ) ?>" class="activity__image d-block ratio ratio-1x1">
+						<?= get_the_post_thumbnail( $ID, 'medium' ); ?>
+					</a>
 					<div class="activity__content">
 						<h3 class="activity__title entry-title">
 							<a href="<?= esc_url( $link ) ?>">
@@ -376,6 +377,8 @@ class Agenda_Public {
 		}
 
 		$output .= '</div>';
+
+		wp_reset_postdata();
 
 		return $output;
 	}
