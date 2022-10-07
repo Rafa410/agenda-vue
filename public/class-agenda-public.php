@@ -232,7 +232,7 @@ class Agenda_Public {
 				?>
 
 				<div class="calendar-event d-flex my-3">
-					<div class="event-date p-3 bg-secondary text-dark">
+					<div class="event-date p-3 bg-secondary text-dark me-sm-2">
 						<span class="day"><?= $day ?></span>
 						<span class="month"><?= $month ?></span>
 					</div>
