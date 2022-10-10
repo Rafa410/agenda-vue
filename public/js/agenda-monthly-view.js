@@ -216,7 +216,7 @@ Vue.component('single-date', {
                             v-if="singleEvent" 
                             :href="getSingleEventUrl(events[0].id)"" 
                             target="_blank"
-                            class="d-none external-link p-1"
+                            class="external-link link-dark p-1"
                             data-bs-toggle="tooltip"
                             :title="__('Veure tots els detalls', 'agenda')">
                             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

@@ -237,7 +237,11 @@ class Agenda_Public {
 						<span class="month"><?= $month ?></span>
 					</div>
 					<div class="event-content p-2">
-						<h3 class="title"><?= $title ?></h3>
+						<h3 class="title">
+							<a class="text-decoration-none link-dark" href="<?= get_the_permalink() ?>">
+								<?= $title ?>
+							</a>
+						</h3>
 						<p class="description"><?= $summary ?></p>
 					</div>
 				</div>
