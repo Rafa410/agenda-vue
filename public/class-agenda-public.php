@@ -215,10 +215,10 @@ class Agenda_Public {
 				$link = get_post_meta( $ID, 'event_link', true );
 
 				$day = date( 'd', strtotime( $date ) );
-				$month = date_i18n( 'F', strtotime( $date ) );
+				$month = wp_date( 'F', strtotime( $date ) );
 				
-				if ( strlen( $month ) > 5 ) {
-					$month = substr( $month, 0, 3 ) . '.'; // Truncate long month names to 3 characters
+				if ( strlen( $month ) > 5 ) {	
+					$month = wp_date( 'M', strtotime( $date ) ); // Use short month name
 				}
 				
 				ob_start();
