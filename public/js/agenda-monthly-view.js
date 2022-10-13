@@ -22,12 +22,12 @@ Vue.component('month-indicator', {
         },
     },
     template: `
-        <div class="month-indicator d-flex align-items-center justify-content-evenly">
-            <button @click="$emit('change-month', -1)" class="btn"><b-icon icon="chevron-left" /></button>
+        <div class="month-indicator d-flex align-items-center justify-content-between">
+            <button @click="$emit('change-month', -1)" class="btn"><b-icon icon="chevron-double-left" /></button>
                 <h2 class="fs-4 mb-0">
                     <span>{{ getMonthName(month) }} {{ year }}</span>
                 </h2>
-            <button @click="$emit('change-month', 1)" class="btn"><b-icon icon="chevron-right" /></button>
+            <button @click="$emit('change-month', 1)" class="btn"><b-icon icon="chevron-double-right" /></button>
         </div>
     `,
 });
