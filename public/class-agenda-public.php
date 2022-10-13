@@ -207,7 +207,7 @@ class Agenda_Public {
 				$ID = get_the_ID();
 
 				$title = get_the_title();
-				$summary = get_post_meta( $ID, 'event_summary', true );
+				$summary = get_post_meta( $ID, 'event_summary', true ) ?: get_the_excerpt();
 				$date = get_post_meta( $ID, 'event_date', true );
 				$time = get_post_meta( $ID, 'event_time', true );
 				$duration = get_post_meta( $ID, 'event_duration', true );
@@ -219,12 +219,6 @@ class Agenda_Public {
 				
 				if ( strlen( $month ) > 5 ) {
 					$month = substr( $month, 0, 3 ) . '.'; // Truncate long month names to 3 characters
-				}
-
-				if ( ! $summary ) {
-					$summary = get_the_excerpt();
-					$summary = substr($summary, 0, 100); // Limit excerpt to 100 characters
-					$summary = substr($summary, 0, strrpos($summary, ' ')) . '...'; // Avoid breaking last word
 				}
 				
 				ob_start();
@@ -242,7 +236,7 @@ class Agenda_Public {
 								<?= $title ?>
 							</a>
 						</h3>
-						<p class="description"><?= $summary ?></p>
+						<p class="description"><?= wp_trim_words( $summary, 45 ) ?></p>
 					</div>
 				</div>
 
