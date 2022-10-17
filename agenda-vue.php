@@ -16,7 +16,7 @@
  * Plugin Name:       Agenda Vue
  * Plugin URI:        https://github.com/Rafa410/agenda-vue
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            Rafa Soler
  * Author URI:        https://github.com/Rafa410/
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'AGENDA_VERSION', '1.0.1' );
+define( 'AGENDA_VERSION', '1.0.2' );
 
 /**
  * The code that runs during plugin activation.
