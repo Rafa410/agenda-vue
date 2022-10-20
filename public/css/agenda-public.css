@@ -94,9 +94,11 @@
 }
 
 .btn-unstyled {
+    color: inherit;
     background: transparent;
     border: 0;
     appearance: none;
+    -webkit-appearance: none;
     padding: 0;
 }
 
