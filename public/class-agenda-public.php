@@ -246,7 +246,7 @@ class Agenda_Public {
 
 			}
 		} else {
-			$output .= '<p>' . __( 'No hay próximos eventos', 'agenda' ) . '</p>';
+			$output .= '<p class="fw-light text-muted text-center">' . __( 'No hi ha esdeveniments propers', 'agenda' ) . '</p>';
 		}
 
 		$output .= '</div>';
@@ -371,7 +371,7 @@ class Agenda_Public {
 			$output .= '</div>';
 
 		} else {
-			$output .= '<p class="fw-light text-muted fs-5">' . __( 'No hay próximas actividades', 'agenda' ) . '</p>';
+			$output .= '<p class="fw-light text-muted fs-5">' . __( 'No hi ha activitats properes', 'agenda' ) . '</p>';
 		}
 
 		$output .= '</div>';
