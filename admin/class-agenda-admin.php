@@ -180,7 +180,7 @@ class Agenda_Admin {
 		add_menu_page( 
 			$this->plugin_name, 
 			__( 'Agenda', 'agenda' ),
-			'administrator',
+			'edit_posts',
 			$this->plugin_name,
 			array( $this, 'display_plugin_admin_dashboard' ),
 			'dashicons-calendar',
