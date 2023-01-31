@@ -220,7 +220,7 @@ class Agenda_Admin {
 					<textarea 
 						name="event_summary" 
 						id="event_summary" ><?= get_post_meta( $post->ID, 'event_summary', true ) ?></textarea>
-					<small><?= __( 'Si no s\'introdueix un resum, es generarà automàticament a partir del contingut.', 'noticeboard' ) ?></small>
+					<small><?= __( 'Si no s\'introdueix un resum, es generarà automàticament a partir del contingut.', 'agenda' ) ?></small>
 				</li>
 
 				<li>
@@ -428,7 +428,7 @@ class Agenda_Admin {
 		if ( ! current_user_can( 'edit_post', $object->ID ) ) {
 			return new WP_Error( 
 				'rest_cannot_update', 
-				__( 'Sorry, you are not allowed to update this post.' ), 
+				__( 'Sorry, you are not allowed to update this post.', 'agenda' ), 
 				array( 'status' => rest_authorization_required_code() ) 
 			);
 		}
