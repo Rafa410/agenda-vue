@@ -96,11 +96,13 @@ class Agenda_Public {
 		 * class.
 		 */
 
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
 		// wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/agenda-public.js', array( 'jquery' ), $this->version, false );
 		wp_register_script( 'polyfill-IntersectionObserver', 'https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver' );		
-		wp_register_script( 'vue', 'https://cdn.jsdelivr.net/npm/vue@2.6/dist/vue.js', array(), null, true );
-		wp_register_script( 'bootstrap-vue', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@2/dist/bootstrap-vue.min.js', array(), null, true );
-		wp_register_script( 'bootstrap-vue-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-vue@2/dist/bootstrap-vue-icons.min.js', array(), null, true );
+		wp_register_script( 'vue', "https://cdn.jsdelivr.net/npm/vue@2.6/dist/vue{$suffix}.js", array(), null, true );
+		wp_register_script( 'bootstrap-vue', "https://cdn.jsdelivr.net/npm/bootstrap-vue@2/dist/bootstrap-vue{$suffix}.js", array(), null, true );
+		wp_register_script( 'bootstrap-vue-icons', "https://cdn.jsdelivr.net/npm/bootstrap-vue@2/dist/bootstrap-vue-icons{$suffix}.js", array(), null, true );
 		wp_register_script( 'agenda-monthly-view', plugin_dir_url( __FILE__ ) . 'js/agenda-monthly-view.js', array( 'vue', 'wp-i18n' ), $this->version, true );
 
 		// Define some variables to be used in Vue.js
