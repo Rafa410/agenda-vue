@@ -1,4 +1,4 @@
-# Copyright (C) 2023 Rafa Soler
+# Copyright (C) 2024 Rafa Soler
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
@@ -9,9 +9,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-01-31T10:52:16+01:00\n"
+"POT-Creation-Date: 2024-01-25T12:28:05+01:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.7.1\n"
+"X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: agenda\n"
 
 #. Plugin Name of the plugin
@@ -43,212 +43,213 @@ msgid "Event"
 msgstr ""
 
 #: admin/class-agenda-admin.php:144
-msgid "Afegir event"
+msgid "Add event"
 msgstr ""
 
 #: admin/class-agenda-admin.php:145
-msgid "Afegir nou event"
+msgid "Add new event"
 msgstr ""
 
 #: admin/class-agenda-admin.php:146
-msgid "Editar event"
+msgid "Edit event"
 msgstr ""
 
 #: admin/class-agenda-admin.php:147
-msgid "Nou event"
+msgid "New event"
 msgstr ""
 
 #: admin/class-agenda-admin.php:148
-msgid "Veure event"
+msgid "View event"
 msgstr ""
 
 #: admin/class-agenda-admin.php:149
-msgid "Cercar event"
-msgstr ""
-
-#: admin/class-agenda-admin.php:150
-msgid "No s'han trobat events"
+msgid "Search event"
 msgstr ""
 
 #: admin/class-agenda-admin.php:151
-msgid "No s'han trobat events a la paperera"
+msgid "No events found"
 msgstr ""
 
-#: admin/class-agenda-admin.php:166
+#: admin/class-agenda-admin.php:152
+msgid "No events found in trash"
+msgstr ""
+
+#: admin/class-agenda-admin.php:167
 msgctxt "slug"
 msgid "events"
 msgstr ""
 
-#: admin/class-agenda-admin.php:182
+#: admin/class-agenda-admin.php:183
 msgid "Agenda"
 msgstr ""
 
-#: admin/class-agenda-admin.php:203
-msgid "Camps personalitzats pels anuncis"
+#: admin/class-agenda-admin.php:204
+msgid "Custom fields for events"
 msgstr ""
 
-#: admin/class-agenda-admin.php:219
-msgid "Resum de l'event"
+#: admin/class-agenda-admin.php:220
+msgid "Event summary"
 msgstr ""
 
-#: admin/class-agenda-admin.php:227
-msgid "Data"
+#: admin/class-agenda-admin.php:224
+msgid "If no summary is provided, it will be automatically generated from the content."
 msgstr ""
 
-#: admin/class-agenda-admin.php:234
-msgid "Data de l'event"
+#: admin/class-agenda-admin.php:228
+msgid "Date"
 msgstr ""
 
-#: admin/class-agenda-admin.php:238
-msgid "Hora"
+#: admin/class-agenda-admin.php:235
+msgid "Event date"
 msgstr ""
 
-#: admin/class-agenda-admin.php:244
-msgid "Hora de l'event"
+#: admin/class-agenda-admin.php:239
+msgid "Time"
 msgstr ""
 
-#: admin/class-agenda-admin.php:248
-msgid "Durada"
+#: admin/class-agenda-admin.php:245
+msgid "Event time"
 msgstr ""
 
-#: admin/class-agenda-admin.php:254
-msgid "Durada de l'event en minuts"
+#: admin/class-agenda-admin.php:249
+msgid "Duration"
 msgstr ""
 
-#: admin/class-agenda-admin.php:258
-msgid "Lloc"
+#: admin/class-agenda-admin.php:255
+msgid "Event duration in minutes"
 msgstr ""
 
-#: admin/class-agenda-admin.php:264
-msgid "Lloc de l'event"
+#: admin/class-agenda-admin.php:259
+msgid "Location"
 msgstr ""
 
-#: admin/class-agenda-admin.php:268
-msgid "Enllaç"
+#: admin/class-agenda-admin.php:265
+msgid "Event location"
 msgstr ""
 
-#: admin/class-agenda-admin.php:275
-msgid "Opcional. Només quan l'informació de l'event està a una pàgina externa"
+#: admin/class-agenda-admin.php:269
+msgid "Link"
+msgstr ""
+
+#: admin/class-agenda-admin.php:276
+msgid "Optional. Only when the event information is on an external page"
+msgstr ""
+
+#: admin/class-agenda-admin.php:432
+msgid "Sorry, you are not allowed to update this post."
 msgstr ""
 
 #: admin/partials/agenda-admin-settings-display.php:17
-msgid "Opcions de l'agenda"
+msgid "Agenda options"
 msgstr ""
 
 #: admin/partials/agenda-admin-settings-display.php:20
-msgid "Personalització"
+msgid "Customization"
 msgstr ""
 
 #: public/class-agenda-public.php:249
-msgid "No hi ha esdeveniments propers"
-msgstr ""
-
 #: public/class-agenda-public.php:374
-msgid "No hi ha activitats properes"
+msgid "There are no upcoming events"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:9
 #: public/js/agenda-monthly-view.js:9
-msgid "Gener"
+msgid "January"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:10
 #: public/js/agenda-monthly-view.js:10
-msgid "Febrer"
+msgid "February"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:11
 #: public/js/agenda-monthly-view.js:11
-msgid "Març"
+msgid "March"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:12
 #: public/js/agenda-monthly-view.js:12
-msgid "Abril"
+msgid "April"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:13
 #: public/js/agenda-monthly-view.js:13
-msgid "Maig"
+msgid "May"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:14
 #: public/js/agenda-monthly-view.js:14
-msgid "Juny"
+msgid "June"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:15
 #: public/js/agenda-monthly-view.js:15
-msgid "Juliol"
+msgid "July"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:16
 #: public/js/agenda-monthly-view.js:16
-msgid "Agost"
+msgid "August"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:17
 #: public/js/agenda-monthly-view.js:17
-msgid "Setembre"
+msgid "September"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:18
 #: public/js/agenda-monthly-view.js:18
-msgid "Octubre"
+msgid "October"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:19
 #: public/js/agenda-monthly-view.js:19
-msgid "Novembre"
+msgid "November"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:20
 #: public/js/agenda-monthly-view.js:20
-msgid "Desembre"
+msgid "December"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:39
 #: public/js/agenda-monthly-view.js:39
 msgctxt "Abbreviation of the first day of the week"
-msgid "Dl"
+msgid "Mo"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:40
 #: public/js/agenda-monthly-view.js:40
 msgctxt "Abbreviation of the second day of the week"
-msgid "Dt"
+msgid "Tu"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:41
 #: public/js/agenda-monthly-view.js:41
 msgctxt "Abbreviation of the third day of the week"
-msgid "Dm"
+msgid "We"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:42
 #: public/js/agenda-monthly-view.js:42
 msgctxt "Abbreviation of the fourth day of the week"
-msgid "Dj"
+msgid "Th"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:43
 #: public/js/agenda-monthly-view.js:43
 msgctxt "Abbreviation of the fifth day of the week"
-msgid "Dv"
+msgid "Fr"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:44
 #: public/js/agenda-monthly-view.js:44
 msgctxt "Abbreviation of the sixth day of the week"
-msgid "Ds"
+msgid "Sa"
 msgstr ""
 
 #: admin/js/agenda-monthly-view-admin.js:45
 #: public/js/agenda-monthly-view.js:45
 msgctxt "Abbreviation of the seventh day of the week"
-msgid "Dg"
-msgstr ""
-
-#: admin/js/agenda-monthly-view-admin.js:708
-msgid "Estàs segur de que vols eliminar aquest event?"
+msgid "Su"
 msgstr ""

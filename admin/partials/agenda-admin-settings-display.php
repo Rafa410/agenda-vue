@@ -14,10 +14,10 @@
 ?>
 
 <div class="wrap">
-	<h2><?= __( 'Opcions de l\'agenda', 'agenda' ) ?></h2>
+	<h2><?= __( 'Agenda options', 'agenda' ) ?></h2>
 	<?php settings_errors(); ?>
 	<form method="POST" action="options.php" class="card">
-		<h3><?= __( 'Personalització', 'agenda' ) ?></h3>
+		<h3><?= __( 'Customization', 'agenda' ) ?></h3>
 		<?php
 			// settings_fields( 'agenda_ui_settings' );
 			// do_settings_sections( 'agenda_ui_settings' );

@@ -6,18 +6,18 @@ Vue.component('month-indicator', {
     methods: {
         getMonthName(month) {
             return [
-                __('Gener', 'agenda'),
-                __('Febrer', 'agenda'),
-                __('Març', 'agenda'),
-                __('Abril', 'agenda'),
-                __('Maig', 'agenda'),
-                __('Juny', 'agenda'),
-                __('Juliol', 'agenda'),
-                __('Agost', 'agenda'),
-                __('Setembre', 'agenda'),
-                __('Octubre', 'agenda'),
-                __('Novembre', 'agenda'),
-                __('Desembre', 'agenda'),
+                __('January', 'agenda'),
+                __('February', 'agenda'),
+                __('March', 'agenda'),
+                __('April', 'agenda'),
+                __('May', 'agenda'),
+                __('June', 'agenda'),
+                __('July', 'agenda'),
+                __('August', 'agenda'),
+                __('September', 'agenda'),
+                __('October', 'agenda'),
+                __('November', 'agenda'),
+                __('December', 'agenda'),
             ][month];
         },
     },
@@ -36,13 +36,13 @@ Vue.component('days-of-week', {
     data() {
         return {
             daysOfWeek: [
-                _x('Dl', 'Abbreviation of the first day of the week', 'agenda'),
-                _x('Dt', 'Abbreviation of the second day of the week', 'agenda'),
-                _x('Dm', 'Abbreviation of the third day of the week', 'agenda'),
-                _x('Dj', 'Abbreviation of the fourth day of the week', 'agenda'),
-                _x('Dv', 'Abbreviation of the fifth day of the week', 'agenda'),
-                _x('Ds', 'Abbreviation of the sixth day of the week', 'agenda'),
-                _x('Dg', 'Abbreviation of the seventh day of the week', 'agenda'),
+                _x('Mo', 'Abbreviation of the first day of the week', 'agenda'),
+                _x('Tu', 'Abbreviation of the second day of the week', 'agenda'),
+                _x('We', 'Abbreviation of the third day of the week', 'agenda'),
+                _x('Th', 'Abbreviation of the fourth day of the week', 'agenda'),
+                _x('Fr', 'Abbreviation of the fifth day of the week', 'agenda'),
+                _x('Sa', 'Abbreviation of the sixth day of the week', 'agenda'),
+                _x('Su', 'Abbreviation of the seventh day of the week', 'agenda'),
             ],
         };
     },
@@ -338,10 +338,10 @@ Vue.component('single-date', {
 
                 <template #title>
                     <strong v-if="singleEvent" class="pe-3 mr-auto">
-                        {{ __('Event del', 'agenda') }} {{ formatLocalizedDate(formatDateTime(day)) }}
+                        {{ __('Event of', 'agenda') }} {{ formatLocalizedDate(formatDateTime(day)) }}
                     </strong>
                     <strong v-else class="pe-3 mr-auto">
-                        {{ __('Crear nou event', 'agenda') }}
+                        {{ __('Create new event', 'agenda') }}
                     </strong>
 
                     <b-link
@@ -350,7 +350,7 @@ Vue.component('single-date', {
                         target="_blank"
                         class="external-link p-1"
                         v-b-tooltip
-                        :title="__('Veure tots els detalls', 'agenda')">
+                        :title="__('View event details', 'agenda')">
                         <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
                             <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
@@ -362,7 +362,7 @@ Vue.component('single-date', {
                         @click="onDelete" 
                         class="btn p-1" 
                         v-b-tooltip
-                        :title="__('Eliminar event', 'agenda')">
+                        :title="__('Delete event', 'agenda')">
                         <b-icon icon="trash" />
                     </button>
 
@@ -371,18 +371,18 @@ Vue.component('single-date', {
                         @click="onClose" 
                         class="btn popover-close p-1" 
                         v-b-tooltip
-                        :title="__('Tancar', 'agenda')">
+                        :title="__('Close', 'agenda')">
                         <span class="d-inline-block" aria-hidden="true">&times;</span>
                     </button>
                 </template>
 
                 <div>
                     <b-form-group
-                        :label=" htmlDecode( __('Títol de l&#8217;event', 'agenda') )"
+                        :label="__('Title of the event', 'agenda')"
                         label-for="event_title"
                         :state="event_title_state"
                         class="mb-1"
-                        :invalid-feedback="__('El títol és obligatori', 'agenda')"
+                        :invalid-feedback="__('The title is mandatory', 'agenda')"
                     >
                         <b-form-input
                             v-if="modifiedEvents[0]?.title"
@@ -403,7 +403,7 @@ Vue.component('single-date', {
                     </b-form-group>
 
                     <b-form-group
-                        :label=" __('Resum', 'agenda')"
+                        :label=" __('Summary', 'agenda')"
                         label-for="event_summary"
                         class="mb-1"
                     >
@@ -424,11 +424,11 @@ Vue.component('single-date', {
                     </b-form-group>
 
                     <b-form-group
-                        :label=" __('Data', 'agenda')"
+                        :label=" __('Date', 'agenda')"
                         label-for="event_date"
                         class="mb-1"
                         :state="event_date_state"
-                        :invalid-feedback="__('Introdueix una data', 'agenda')"
+                        :invalid-feedback="__('Enter a date', 'agenda')"
                     >
                         <b-form-datepicker
                             v-if="modifiedEvents[0]?.event_date"
@@ -438,7 +438,7 @@ Vue.component('single-date', {
                             :state="event_date_state"
                             size="sm"
                             :locale="currentLocale"
-                            :placeholder="htmlDecode(__('Selecciona la data de l&#8217;event', 'agenda'))"
+                            :placeholder="__('Select the event date', 'agenda')"
                         ></b-form-datepicker>
                         <b-form-datepicker
                             v-else
@@ -448,12 +448,12 @@ Vue.component('single-date', {
                             :state="event_date_state"
                             size="sm"
                             :locale="currentLocale"
-                            :placeholder="htmlDecode(__('Selecciona la data de l&#8217;event', 'agenda'))"
+                            :placeholder="__('Select the event date', 'agenda')"
                         ></b-form-datepicker>
                     </b-form-group>
 
                     <b-form-group
-                        :label=" __('Hora', 'agenda')"
+                        :label=" __('Time', 'agenda')"
                         label-for="event_time"
                         class="mb-1"
                     >
@@ -464,7 +464,7 @@ Vue.component('single-date', {
                             v-model="modifiedEvents[0].event_time"
                             size="sm"
                             :locale="currentLocale"
-                            :placeholder="htmlDecode(__('Selecciona la hora de l&#8217;event', 'agenda'))"
+                            :placeholder="__('Select the event time', 'agenda')"
                         ></b-form-timepicker>
                         <b-form-timepicker
                             v-else
@@ -473,12 +473,12 @@ Vue.component('single-date', {
                             v-model="newEvent.event_time"
                             size="sm"
                             :locale="currentLocale"
-                            :placeholder="htmlDecode(__('Selecciona la hora de l&#8217;event', 'agenda'))"
+                            :placeholder="__('Select the event time', 'agenda')"
                         ></b-form-timepicker>
                     </b-form-group>
 
                     <b-form-group
-                        :label=" __('Durada', 'agenda')"
+                        :label=" __('Duration', 'agenda')"
                         label-for="event_duration"
                         class="mb-1"
                     >
@@ -501,7 +501,7 @@ Vue.component('single-date', {
                     </b-form-group>
 
                     <b-form-group
-                        :label=" __('Ubicació', 'agenda')"
+                        :label=" __('Location', 'agenda')"
                         label-for="event_location"
                         class="mb-1"
                     >
@@ -522,7 +522,7 @@ Vue.component('single-date', {
                     </b-form-group>
 
                     <b-form-group
-                        :label=" __('Enllaç', 'agenda')"
+                        :label=" __('Link', 'agenda')"
                         label-for="event_link"
                         class="mb-1"
                     >
@@ -548,7 +548,7 @@ Vue.component('single-date', {
 
                     <div class="d-flex justify-content-between mt-3">
                         <b-button @click="onClose" size="sm" variant="outline-danger">
-                            {{ __('Cancelar', 'agenda') }}
+                            {{ __('Cancel', 'agenda') }}
                         </b-button>
                         <b-button @click="onOk" size="sm" variant="outline-primary">Ok</b-button>
                     </div>
@@ -705,7 +705,7 @@ const app = new Vue({
          * @param {number} eventId
          */
         deleteEvent(eventId) {
-            if (!confirm(__('Estàs segur de que vols eliminar aquest event?', 'agenda'))) {
+            if (!confirm('Are you sure you want to delete this event?', 'agenda')) {
                 return;
             }
 

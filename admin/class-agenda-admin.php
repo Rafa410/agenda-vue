@@ -141,14 +141,14 @@ class Agenda_Admin {
 		$labels = array(
 			'name' 					=> __( 'Events', 'agenda' ),
 			'singular_name' 		=> __( 'Event', 'agenda' ),
-			'add_new' 				=> __( 'Afegir event', 'agenda' ),
-			'add_new_item' 			=> __( 'Afegir nou event', 'agenda' ),
-			'edit_item' 			=> __( 'Editar event', 'agenda' ),
-			'new_item' 				=> __( 'Nou event', 'agenda' ),
-			'view_item' 			=> __( 'Veure event', 'agenda' ),
-			'search_items' 			=> __( 'Cercar event', 'agenda' ),
-			'not_found' 			=> __( 'No s\'han trobat events', 'agenda' ),
-			'not_found_in_trash'	=> __( 'No s\'han trobat events a la paperera', 'agenda' ),
+			'add_new' 				=> __( 'Add event', 'agenda' ),
+			'add_new_item' 			=> __( 'Add new event', 'agenda' ),
+			'edit_item' 			=> __( 'Edit event', 'agenda' ),
+			'new_item' 				=> __( 'New event', 'agenda' ),
+			'view_item' 			=> __( 'View event', 'agenda' ),
+			'search_items' 			=> __( 'Search event', 'agenda' ),
+			'not_found' 			=> __( 'No events found', 'agenda' ),
+			'not_found_in_trash'	=> __( 'No events found in trash', 'agenda' ),
 		);
 		$args = array(
 			'labels' 		=> $labels, 									// Specific labels for this post type, e.g. Plugin name
@@ -200,7 +200,7 @@ class Agenda_Admin {
 	public function setup_agenda_metaboxes() {
 		add_meta_box(
 			'agenda_event_metaboxes', 
-			__( 'Camps personalitzats pels anuncis', 'agenda' ), 
+			__( 'Custom fields for events', 'agenda' ),
 			array($this, 'agenda_event_metaboxes'), 
 			'agenda_events',
 			'normal',
@@ -216,63 +216,63 @@ class Agenda_Admin {
 		<div class="agenda_field_containers">
 			<ul class="event_data_metaboxes">
 				<li>
-					<label for="event_summary"><?= __( 'Resum de l\'event', 'agenda' ) ?></label>
+					<label for="event_summary"><?= __( 'Event summary', 'agenda' ) ?></label>
 					<textarea 
 						name="event_summary" 
 						id="event_summary" ><?= get_post_meta( $post->ID, 'event_summary', true ) ?></textarea>
-					<small><?= __( 'Si no s\'introdueix un resum, es generarà automàticament a partir del contingut.', 'agenda' ) ?></small>
+					<small><?= __( 'If no summary is provided, it will be automatically generated from the content.', 'agenda' ) ?></small>
 				</li>
 
 				<li>
-					<label for="event_date"><?= __( 'Data', 'agenda' ) ?><sup>*</sup></label>
+					<label for="event_date"><?= __( 'Date', 'agenda' ) ?><sup>*</sup></label>
 					<input 
 						class="w-auto"
 						type="date" 
 						name="event_date" 
 						id="event_date" 
 						value="<?= get_post_meta( $post->ID, 'event_date', true ); ?>" 
-						placeholder="<?= __( 'Data de l\'event', 'agenda' ) ?>">
+						placeholder="<?= __( 'Event date', 'agenda' ) ?>">
 				</li>
 
 				<li>
-					<label for="event_time"><?= __( 'Hora', 'agenda' ) ?></label>
+					<label for="event_time"><?= __( 'Time', 'agenda' ) ?></label>
 					<input 
 						type="time" 
 						name="event_time" 
 						id="event_time" 
 						value="<?= get_post_meta( $post->ID, 'event_time', true ); ?>" 
-						placeholder="<?= __( 'Hora de l\'event', 'agenda' ) ?>">
+						placeholder="<?= __( 'Event time', 'agenda' ) ?>">
 				</li>
 
 				<li>
-					<label for="event_duration"><?= __( 'Durada', 'agenda' ) ?></label>
+					<label for="event_duration"><?= __( 'Duration', 'agenda' ) ?></label>
 					<input 
 						type="number" 
 						name="event_duration" 
 						id="event_duration" 
 						value="<?= get_post_meta( $post->ID, 'event_duration', true ); ?>" 
-						placeholder="<?= __( 'Durada de l\'event en minuts', 'agenda' ) ?>">
+						placeholder="<?= __( 'Event duration in minutes', 'agenda' ) ?>">
 				</li>
 
 				<li>
-					<label for="event_location"><?= __( 'Lloc', 'agenda' ) ?></label>
+					<label for="event_location"><?= __( 'Location', 'agenda' ) ?></label>
 					<input 
 						type="text" 
 						name="event_location" 
 						id="event_location" 
 						value="<?= get_post_meta( $post->ID, 'event_location', true ); ?>" 
-						placeholder="<?= __( 'Lloc de l\'event', 'agenda' ) ?>">
+						placeholder="<?= __( 'Event location', 'agenda' ) ?>">
 				</li>
 
 				<li>
-					<label for="event_link"><?= __( 'Enllaç', 'agenda' ) ?></label>
+					<label for="event_link"><?= __( 'Link', 'agenda' ) ?></label>
 					<input 
 						type="url" 
 						name="event_link" 
 						id="event_link" 
 						value="<?= get_post_meta( $post->ID, 'event_link', true ); ?>" 
 						placeholder="https://">
-						<small><?= __( 'Opcional. Només quan l\'informació de l\'event està a una pàgina externa', 'agenda' ) ?></small>
+						<small><?= __( 'Optional. Only when the event information is on an external page', 'agenda' ) ?></small>
 				</li>
 
 			</ul>

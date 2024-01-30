@@ -246,7 +246,7 @@ class Agenda_Public {
 
 			}
 		} else {
-			$output .= '<p class="fw-light text-muted text-center">' . __( 'No hi ha esdeveniments propers', 'agenda' ) . '</p>';
+			$output .= '<p class="fw-light text-muted text-center">' . __( 'There are no upcoming events', 'agenda' ) . '</p>';
 		}
 
 		$output .= '</div>';
@@ -365,13 +365,13 @@ class Agenda_Public {
 				'format' => 'page/%#%',
 				'current' => max( 1, get_query_var( 'paged' ) ),
 				'total' => $query->max_num_pages,
-				// 'prev_text' => __( 'Anterior', 'agenda' ),
-				// 'next_text' => __( 'Siguiente', 'agenda' ),
+				// 'prev_text' => __( 'Previous', 'agenda' ),
+				// 'next_text' => __( 'Next', 'agenda' ),
 			) );
 			$output .= '</div>';
 
 		} else {
-			$output .= '<p class="fw-light text-muted fs-5">' . __( 'No hi ha activitats properes', 'agenda' ) . '</p>';
+			$output .= '<p class="fw-light text-muted fs-5">' . __( 'There are no upcoming events', 'agenda' ) . '</p>';
 		}
 
 		$output .= '</div>';

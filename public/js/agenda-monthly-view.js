@@ -6,18 +6,18 @@ Vue.component('month-indicator', {
     methods: {
         getMonthName(month) {
             return [
-                __('Gener', 'agenda'),
-                __('Febrer', 'agenda'),
-                __('Març', 'agenda'),
-                __('Abril', 'agenda'),
-                __('Maig', 'agenda'),
-                __('Juny', 'agenda'),
-                __('Juliol', 'agenda'),
-                __('Agost', 'agenda'),
-                __('Setembre', 'agenda'),
-                __('Octubre', 'agenda'),
-                __('Novembre', 'agenda'),
-                __('Desembre', 'agenda'),
+                __('January', 'agenda'),
+                __('February', 'agenda'),
+                __('March', 'agenda'),
+                __('April', 'agenda'),
+                __('May', 'agenda'),
+                __('June', 'agenda'),
+                __('July', 'agenda'),
+                __('August', 'agenda'),
+                __('September', 'agenda'),
+                __('October', 'agenda'),
+                __('November', 'agenda'),
+                __('December', 'agenda'),
             ][month];
         },
     },
@@ -36,13 +36,13 @@ Vue.component('days-of-week', {
     data() {
         return {
             daysOfWeek: [
-                _x('Dl', 'Abbreviation of the first day of the week', 'agenda'),
-                _x('Dt', 'Abbreviation of the second day of the week', 'agenda'),
-                _x('Dm', 'Abbreviation of the third day of the week', 'agenda'),
-                _x('Dj', 'Abbreviation of the fourth day of the week', 'agenda'),
-                _x('Dv', 'Abbreviation of the fifth day of the week', 'agenda'),
-                _x('Ds', 'Abbreviation of the sixth day of the week', 'agenda'),
-                _x('Dg', 'Abbreviation of the seventh day of the week', 'agenda'),
+                _x('Mo', 'Abbreviation of the first day of the week', 'agenda'),
+                _x('Tu', 'Abbreviation of the second day of the week', 'agenda'),
+                _x('We', 'Abbreviation of the third day of the week', 'agenda'),
+                _x('Th', 'Abbreviation of the fourth day of the week', 'agenda'),
+                _x('Fr', 'Abbreviation of the fifth day of the week', 'agenda'),
+                _x('Sa', 'Abbreviation of the sixth day of the week', 'agenda'),
+                _x('Su', 'Abbreviation of the seventh day of the week', 'agenda'),
             ],
         };
     },
@@ -209,7 +209,7 @@ Vue.component('single-date', {
 
                     <template #title>
                         <strong v-if="singleEvent" class="pe-3 me-auto">
-                            {{ __('Event del', 'agenda') }} {{ formatLocalizedDate(formatDateTime(day)) }}
+                            {{ __('Event of', 'agenda') }} {{ formatLocalizedDate(formatDateTime(day)) }}
                         </strong>
 
                         <b-link
@@ -218,7 +218,7 @@ Vue.component('single-date', {
                             target="_blank"
                             class="external-link link-dark p-1"
                             data-bs-toggle="tooltip"
-                            :title="__('Veure tots els detalls', 'agenda')">
+                            :title="__('View event details', 'agenda')">
                             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
                                 <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
@@ -228,7 +228,7 @@ Vue.component('single-date', {
                         <button 
                             @click="onClose" 
                             class="btn popover-close p-1" 
-                            :title="__('Tancar', 'agenda')">
+                            :title="__('Close', 'agenda')">
                             <span class="d-inline-block" aria-hidden="true">&times;</span>
                         </button>
                     </template>
