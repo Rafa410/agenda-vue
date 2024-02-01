@@ -110,6 +110,7 @@ class Agenda_Public {
 			'site_url' => site_url(),
 			'api_url' => esc_url_raw( rest_url() ),
 			'calendar_id' => wp_generate_password( 5, false ),
+			'locale' => get_locale(),
 		) );
 
 	}

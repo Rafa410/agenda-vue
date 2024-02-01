@@ -119,7 +119,7 @@ Vue.component('single-date', {
     data() {
         return {
             isOpen: false,
-            currentLocale: 'ca',
+            currentLocale: wpSettings?.locale ? wpSettings.locale.replace('_', '-') : 'en',
         };
     },
 
@@ -140,7 +140,8 @@ Vue.component('single-date', {
             return `${this.year}-${formatedMonth}-${formatedDay}`;
         },
 
-        formatLocalizedDate(date, locale = 'ca', customOptions) {
+        formatLocalizedDate(date, locale, customOptions) {
+            locale = locale || this.currentLocale;
             const options = {
                 year: 'numeric',
                 month: 'long',
@@ -150,7 +151,8 @@ Vue.component('single-date', {
             return new Date(date).toLocaleDateString(locale, options);
         },
 
-        formatTime(event_time, event_duration, locale = 'ca') {
+        formatTime(event_time, event_duration, locale) {
+            locale = locale || this.currentLocale;
             const startTime = (endTime = new Date(
                 `${this.formatDateTime(this.day)} ${event_time}`
             ));
@@ -209,7 +211,7 @@ Vue.component('single-date', {
 
                     <template #title>
                         <strong v-if="singleEvent" class="pe-3 me-auto">
-                            {{ __('Event of', 'agenda') }} {{ formatLocalizedDate(formatDateTime(day)) }}
+                            {{ events[0]?.title }}
                         </strong>
 
                         <b-link
@@ -235,15 +237,10 @@ Vue.component('single-date', {
 
                     <div>
 
-                        <h3 tabindex="-1" class="fs-6">{{ events[0]?.title }}</h3>
-
-                        <hr>
-
                         <template v-if="events[0]?.event_summary">
                             <p class="lh-sm">{{ events[0].event_summary }}</p>
                             <hr>
                         </template>
-
 
                         <p v-if="events[0]?.event_date" class="d-flex align-items-center gap-2">
                             <b-icon icon="calendar2-date" />
