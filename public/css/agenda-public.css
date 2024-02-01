@@ -85,7 +85,7 @@
 }
 
 .single-date.has-events {
-    background-color: #e0cc39;
+    background-color: var(--bs-primary, lightgray);
 }
 
 .single-date.has-events > button {
@@ -154,10 +154,11 @@
     color: #212529;
     text-decoration: none;
     font-weight: bold;
-    transition: color .3s ease-out;
+    transition: color 0.3s ease-out;
 }
 
-.activity__title > a:hover, .activity__title > a:focus {
+.activity__title > a:hover,
+.activity__title > a:focus {
     color: #767676;
 }
 
@@ -170,7 +171,8 @@
     font-size: 0.875rem;
 }
 
-p.activity__summary, .activity__summary p:last-child {
+p.activity__summary,
+.activity__summary p:last-child {
     margin-bottom: 0;
 }
 
